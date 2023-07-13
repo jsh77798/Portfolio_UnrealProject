@@ -2,13 +2,16 @@
 
 using UnrealBuildTool;
 
-public class Portfolio01 : ModuleRules
+public class Portfolio00 : ModuleRules
 {
-	public Portfolio01(ReadOnlyTargetRules Target) : base(Target)
+	public Portfolio00(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+
+        PublicIncludePaths.Add(ModuleDirectory);
+        PrivateIncludePaths.Add(ModuleDirectory);
+
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
