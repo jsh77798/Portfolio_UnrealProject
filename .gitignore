@@ -398,10 +398,10 @@ SourceArt/**/*.tga
 # Binary Files
 Binaries/*
 Plugins/*/Binaries/*
-Portfolio00/Binaries/*
-Portfolio00/Intermediate/*
-Portfolio00/Saved/*
-Portfolio00.sln
+Portfolio01/Binaries/*
+Portfolio01/Intermediate/*
+Portfolio01/Saved/*
+Portfolio01.sln
 
 # Builds
 Build/*
