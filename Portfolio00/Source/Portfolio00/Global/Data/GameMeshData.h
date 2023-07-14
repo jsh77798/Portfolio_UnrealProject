@@ -8,6 +8,8 @@
 /**
  *
  */
+
+
 USTRUCT(BlueprintType)
 struct PORTFOLIO00_API FGameMeshData : public FTableRowBase
 {

@@ -24,6 +24,9 @@ APortfolio_Character::APortfolio_Character()
 
 	// 생성자에서 컴포넌트를 만드는 방법은 다음의 함수를 사용하면 된다.
 
+
+    /*
+
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
 
 	// 어떤 다른 부모에게 나를 붙인다는 이야기가 됩니다.
@@ -54,6 +57,7 @@ APortfolio_Character::APortfolio_Character()
 			WeaponArrays.Add(MeshLoader.Object);
 		}
     }
+	*/
 
 	// CDO조사 이후에 블루프린트 초기화가 이루어지게 되는데.
 }
