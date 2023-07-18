@@ -9,6 +9,6 @@ public class Portfolio01EditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.AddRange( new string[] { "Portfolio01" } );
+        ExtraModuleNames.AddRange( new string[] { "Portfolio01" } );
 	}
 }
