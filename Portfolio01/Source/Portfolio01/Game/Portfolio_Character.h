@@ -16,6 +16,7 @@ public:
 	// Sets default values for this character's properties
 	APortfolio_Character();
 
+
 	// 블루프린트에서 호출하게 하려면 기본적으로 public이어야 합니다.
 	UFUNCTION(BlueprintCallable)
 	void AnimationTick();
@@ -29,14 +30,12 @@ protected:
 
 	
 public:	
-	void AttackAction();
 
-	void MoveLeft(float Val);
 	void MoveRight(float Val);
 	void MoveForward(float Val);
-	void MoveBackward(float Val);
 	void TurnAtRate(float Rate);
 	void LookUpAtRate(float Rate);
+	//void AttackAction();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
 		float BaseTurnRate;

@@ -15,11 +15,14 @@ enum class EAniState : uint8
 	RightMove UMETA(DisplayName = "RightMove"),
 	ForwardMove UMETA(DisplayName = "ForwardMove"),
 	BackwardMove UMETA(DisplayName = "BackwardMove"),
-	Run UMETA(DisplayName = "Run"),
+};
+
+	/*Run UMETA(DisplayName = "Run"),
 	Crouch UMETA(DisplayName = "Crouch"),
 	Aiming UMETA(DisplayName = "Aiming"),
-	Attack UMETA(DisplayName = "Attack"),
-};
+	Attack UMETA(DisplayName = "Attack"),*/
+
+
 
 
 UENUM(BlueprintType)

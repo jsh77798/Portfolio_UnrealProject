@@ -2,6 +2,7 @@
 
 
 #include "Portfolio_Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 APortfolio_Character::APortfolio_Character()
@@ -9,9 +10,13 @@ APortfolio_Character::APortfolio_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BaseTurnRate = 30.f;
-	BaseLookUpRate = 30.f;
+	BaseTurnRate = 25.f;
+	BaseLookUpRate = 25.f;
 
+
+	//캐릭터 이동 회전 (#include "GameFramework/CharacterMovementComponent.h" 헤더 필요)
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
 }
 
 // Called when the game starts or when spawned
@@ -25,6 +30,7 @@ void APortfolio_Character::BeginPlay()
 void APortfolio_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	/*
 	class UAnimMontage* Montage = AllAnimations[AniState];
 
@@ -56,18 +62,18 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		// DefaultPawn_MoveForward 추가되는것 뿐
 		// 축매핑만 하고 있스니다.
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveForward", EKeys::W, 1.f));
-		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveBackward", EKeys::S, -1.f));
+		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveForward", EKeys::S, -1.f));
 
-		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveLeft", EKeys::A, -1.f));
+		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveRight", EKeys::A, -1.f));
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveRight", EKeys::D, 1.f));
 
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerTurn", EKeys::MouseX, 1.f));
 
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerLookUp", EKeys::MouseY, -1.f));
 
-		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerLookUp", EKeys::MouseY, -1.f));
-
-    	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAttack"), EKeys::LeftMouseButton));
+		//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerLookUp", EKeys::MouseY, -1.f));
+		
+    	//UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAttack"), EKeys::LeftMouseButton));
 
 	}
 
@@ -75,55 +81,25 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	// 이 키가 눌리면 이 함수를 실행시켜줘인데.
 	// 축일때는 일단 계속 실행시켜줘.
 	PlayerInputComponent->BindAxis("PlayerMoveForward", this, &APortfolio_Character::MoveForward);
-	PlayerInputComponent->BindAxis("PlayerMoveBackward", this, &APortfolio_Character::MoveBackward);
-	PlayerInputComponent->BindAxis("PlayerMoveLeft", this, &APortfolio_Character::MoveLeft);
 	PlayerInputComponent->BindAxis("PlayerMoveRight", this, &APortfolio_Character::MoveRight);
 	PlayerInputComponent->BindAxis("PlayerTurn", this, &APortfolio_Character::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("PlayerTurnRate", this, &APortfolio_Character::TurnAtRate);
 	PlayerInputComponent->BindAxis("PlayerLookUp", this, &APortfolio_Character::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("PlayerLookUpRate", this, &APortfolio_Character::LookUpAtRate);
 
-	PlayerInputComponent->BindAction("PlayerAttack", EInputEvent::IE_Pressed, this, &APortfolio_Character::AttackAction);
+	//PlayerInputComponent->BindAction("PlayerAttack", EInputEvent::IE_Pressed, this, &APortfolio_Character::AttackAction);
 	
-
 }
 
-void APortfolio_Character::MoveLeft(float Val)
-{
-	if (AniState == EAniState::Attack)
-	{
-		return;
-	}
-
-	if (Val != 0.f)
-	{
-		if (Controller)
-		{
-			FRotator const ControlSpaceRot = Controller->GetControlRotation();
-			// transform to world space and add it
-			// 현재 내 회전을 가져와서 y축에 해당하는 축벡터를 얻어오는 겁니다.
-			AddMovementInput(FRotationMatrix(ControlSpaceRot).GetScaledAxis(EAxis::Y), Val);
-
-			AniState = Val > 0.f ? EAniState::RightMove : EAniState::LeftMove;
-			return;
-		}
-	}
-	else
-	{
-		if (AniState == EAniState::RightMove || AniState == EAniState::LeftMove)
-		{
-			AniState = EAniState::Idle;
-		}
-	}
-}
 
 void APortfolio_Character::MoveRight(float Val)
 {
+	/*
 	if (AniState == EAniState::Attack)
 	{
 		return;
 	}
-
+	*/
 	if (Val != 0.f)
 	{
 		if (Controller)
@@ -146,13 +122,15 @@ void APortfolio_Character::MoveRight(float Val)
 	}
 }
 
+
 void APortfolio_Character::MoveForward(float Val)
 {
+	/*
 	if (AniState == EAniState::Attack)
 	{
 		return;
 	}
-
+	*/
 	if (Val != 0.f)
 	{
 		if (Controller)
@@ -184,35 +162,6 @@ void APortfolio_Character::MoveForward(float Val)
 	// AEGLOBAL::DebugPrint("AAAAAAA");
 }
 
-void APortfolio_Character::MoveBackward(float Val)
-{
-	if (AniState == EAniState::Attack)
-	{
-		return;
-	}
-
-	if (Val != 0.f)
-	{
-		if (Controller)
-		{
-			
-			FRotator const ControlSpaceRot = Controller->GetControlRotation();
-
-			AddMovementInput(FRotationMatrix(ControlSpaceRot).GetScaledAxis(EAxis::X), Val);
-
-			AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
-			return;
-		}
-	}
-	else
-	{
-		if (AniState == EAniState::ForwardMove || AniState == EAniState::BackwardMove)
-		{
-			AniState = EAniState::Idle;
-		}
-	}
-}
-
 
 void APortfolio_Character::TurnAtRate(float Rate)
 {
@@ -227,7 +176,7 @@ void APortfolio_Character::LookUpAtRate(float Rate)
 }
 
 
-
+/*
 void APortfolio_Character::AttackAction()
 {
 	// 무브먼트 컴포넌트를 통해서 한다.
@@ -235,7 +184,7 @@ void APortfolio_Character::AttackAction()
 
 	AniState = EAniState::Attack;
 }
-
+*/
 
 void APortfolio_Character::AnimationTick()
 {

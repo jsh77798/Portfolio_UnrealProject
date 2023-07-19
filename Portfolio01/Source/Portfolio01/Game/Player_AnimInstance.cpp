@@ -73,12 +73,13 @@ void UPlayer_AnimInstance::MontageEnd(UAnimMontage* Anim, bool _Inter)
 	}
 
 	// Anim 종료된 몽타주
+	/*
 	if (AllAnimations[EAniState::Attack] == Anim)
 	{
 		AniState = EAniState::Idle;
 		Chracter->AniState = AniState;
 		Montage_Play(AllAnimations[EAniState::Idle], 1.0f);
 	}
-
+	*/
 
 }
