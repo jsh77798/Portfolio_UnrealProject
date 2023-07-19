@@ -4,7 +4,7 @@
 #include "Portfolio_AIController.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-//#include ""
+#include "AICharacter.h"
 
 APortfolio_AIController::APortfolio_AIController()
 {
@@ -21,13 +21,15 @@ void APortfolio_AIController::OnPossess(APawn* _InPawn)
 
 	if (nullptr != BehaviorTreeComponent && true == BehaviorTreeComponent->IsValidLowLevel())
 	{
-		//AAICharacter* AIPawn = Cast<AAICharacter>(_InPawn);
-		//UBehaviorTree* BehaviorTree = AIPawn->GetBehaviorTree();
-		//BehaviorTreeComponent->StartTree(*BehaviorTree);
+		AAICharacter* AIPawn = Cast<AAICharacter>(_InPawn);
+
+		UBehaviorTree* BehaviorTree = AIPawn->GetBehaviorTree();
+		BehaviorTreeComponent->StartTree(*BehaviorTree);
+
+		//BlackboardComponent->InitializeBlackboard(*BehaviorTree->BlakboardAsset)
 
 		// 스타트 로직은 이미 블랙보드가 세팅되어있다고 생각하고 동작한다.
 		// BehaviorTreeComponent->StartLogic();
-
 		// BehaviorTreeComponent->StartTree();
 	}
 

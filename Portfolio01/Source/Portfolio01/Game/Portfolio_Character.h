@@ -16,17 +16,19 @@ public:
 	// Sets default values for this character's properties
 	APortfolio_Character();
 
+	// 블루프린트에서 호출하게 하려면 기본적으로 public이어야 합니다.
+	UFUNCTION(BlueprintCallable)
+	void AnimationTick();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	
+public:	
 	void AttackAction();
 
 	void MoveLeft(float Val);
@@ -45,5 +47,10 @@ public:
 
 	UPROPERTY(Category = "GameModeValue", EditAnywhere, BlueprintReadWrite)
 		EAniState AniState = EAniState::Idle;
+
+
+	//몽타주 애니메이션 블루프린트내 Map가져오기
+	UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite)
+		TMap<EAniState, class UAnimMontage*> AllAnimations;
 
 };

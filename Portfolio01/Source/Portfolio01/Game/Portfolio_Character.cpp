@@ -9,8 +9,8 @@ APortfolio_Character::APortfolio_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
+	BaseTurnRate = 30.f;
+	BaseLookUpRate = 30.f;
 
 }
 
@@ -25,6 +25,19 @@ void APortfolio_Character::BeginPlay()
 void APortfolio_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	/*
+	class UAnimMontage* Montage = AllAnimations[AniState];
+
+	if (nullptr == Montage)
+	{
+		return;
+	}
+
+	if (false == GetMesh()->GetAnimInstance()->Montage_IsPlaying(Montage))
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(Montage, 1.0f);
+	}
+	*/
 
 }
 
@@ -34,6 +47,7 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	static bool bBindingsAdded = false;
+
 	if (!bBindingsAdded)
 	{
 		bBindingsAdded = true;
@@ -223,3 +237,7 @@ void APortfolio_Character::AttackAction()
 }
 
 
+void APortfolio_Character::AnimationTick()
+{
+
+}
