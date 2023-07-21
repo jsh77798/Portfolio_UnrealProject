@@ -133,6 +133,7 @@ void APortfolio_Character::MoveForward(float Val)
 	*/
 	if (Val != 0.f)
 	{
+
 		if (Controller)
 		{
 			// 컨트롤러는 기본적으로
@@ -148,6 +149,7 @@ void APortfolio_Character::MoveForward(float Val)
 
 			AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
 			return;
+
 		}
 	}
 	else
