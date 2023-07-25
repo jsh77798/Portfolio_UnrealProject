@@ -10,11 +10,14 @@
 UENUM(BlueprintType)
 enum class EAniState : uint8
 {
+	None UMETA(DisplayName = "None"),
 	Idle UMETA(DisplayName = "Idle"),
 	LeftMove UMETA(DisplayName = "LeftMove"),
 	RightMove UMETA(DisplayName = "RightMove"),
 	ForwardMove UMETA(DisplayName = "ForwardMove"),
 	BackwardMove UMETA(DisplayName = "BackwardMove"),
+	W_Aiming UMETA(DisplayName = "W_Aiming"),
+	W_Attack UMETA(DisplayName = "W_Attack"),
 };
 
 	/*
@@ -31,8 +34,6 @@ enum class EAniState : uint8
 	W_Run UMETA(DisplayName = "W_Run"),
 	W_Crouch UMETA(DisplayName = "W_Crouch"),
 	W_CrouchUP UMETA(DisplayName = "W_CrouchUP"),
-	W_Aiming UMETA(DisplayName = "W_Aiming"),
-	W_Attack UMETA(DisplayName = "W_Attack"),
 	*/
 
 

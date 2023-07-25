@@ -35,7 +35,17 @@ public:
 	void MoveForward(float Val);
 	void TurnAtRate(float Rate);
 	void LookUpAtRate(float Rate);
-	//void AttackAction();
+	void IN_AimingAction();
+	void OUT_AimingAction();
+	void AttackAction();
+
+	int AimingActionCheck = 0;
+
+	UPROPERTY()
+	int ZoomingIn;
+	
+
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
 		float BaseTurnRate;
@@ -51,5 +61,6 @@ public:
 	//몽타주 애니메이션 블루프린트내 Map가져오기
 	UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite)
 		TMap<EAniState, class UAnimMontage*> AllAnimations;
+
 
 };

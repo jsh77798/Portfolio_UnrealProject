@@ -73,7 +73,8 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerLookUp", EKeys::MouseY, -1.f));
 		
-    	//UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAttack"), EKeys::LeftMouseButton));
+		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAiming"), EKeys::RightMouseButton));
+    	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAttack"), EKeys::LeftMouseButton));
 
 	}
 
@@ -87,7 +88,9 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("PlayerLookUp", this, &APortfolio_Character::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("PlayerLookUpRate", this, &APortfolio_Character::LookUpAtRate);
 
-	//PlayerInputComponent->BindAction("PlayerAttack", EInputEvent::IE_Pressed, this, &APortfolio_Character::AttackAction);
+	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Pressed , this, &APortfolio_Character::IN_AimingAction);
+	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Released, this, &APortfolio_Character::OUT_AimingAction);
+	PlayerInputComponent->BindAction("PlayerAttack", EInputEvent::IE_Pressed, this, &APortfolio_Character::AttackAction);
 	
 }
 
@@ -178,15 +181,34 @@ void APortfolio_Character::LookUpAtRate(float Rate)
 }
 
 
-/*
+void APortfolio_Character::IN_AimingAction()
+{
+	ZoomingIn = 1;
+	AimingActionCheck = 1;
+	AniState = EAniState::W_Aiming;
+	
+}
+
+void APortfolio_Character::OUT_AimingAction()
+{
+	ZoomingIn = 0;
+	AimingActionCheck = 0;
+	AniState = EAniState::Idle;
+}
+
 void APortfolio_Character::AttackAction()
 {
 	// 무브먼트 컴포넌트를 통해서 한다.
 	// GetMovementComponent()
+	if (AimingActionCheck == 1)
+	{
+	AniState = EAniState::W_Attack;
+	}
 
-	AniState = EAniState::Attack;
+	   return;
 }
-*/
+
+
 
 void APortfolio_Character::AnimationTick()
 {
