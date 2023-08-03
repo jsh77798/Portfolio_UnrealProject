@@ -42,19 +42,16 @@ enum class EAniState : uint8
 UENUM(BlueprintType)
 enum class AIState : uint8
 {
+	NONE UMETA(DisplayName = "NONE"),
 	IDLE UMETA(DisplayName = "IDLE"),
-
 	MOVE UMETA(DisplayName = "MOVE"),
-	LeftMove UMETA(DisplayName = "LeftMove"),
-	RightMove UMETA(DisplayName = "RightMove"),
-	ForwardMove UMETA(DisplayName = "ForwardMove"),
-	BackwardMove UMETA(DisplayName = "BackwardMove"),
-
 	PATROL UMETA(DisplayName = "PATROL"),
-
 	RETURN UMETA(DisplayName = "RETURN"),
-
 	ATTACK UMETA(DisplayName = "ATTACK"),
-
 	DEATH UMETA(DisplayName = "DEATH"),
 };
+
+	//LeftMove UMETA(DisplayName = "LeftMove"),
+	//RightMove UMETA(DisplayName = "RightMove"),
+	//ForwardMove UMETA(DisplayName = "ForwardMove"),
+	//BackwardMove UMETA(DisplayName = "BackwardMove"),

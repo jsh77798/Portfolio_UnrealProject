@@ -3,15 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BTTaskNode.h"
+#include "BTTask_AIBase.h"
+#include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "BTTask_PATROL.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PORTFOLIO01_API UBTTask_PATROL : public UBTTaskNode
+class PORTFOLIO01_API UBTTask_PATROL : public UBTTask_AIBase
 {
 	GENERATED_BODY()
-	
+
+		UBTTask_PATROL();
+protected:
+
+	//UPROPERTY()
+	//UPatrolPositions* PP;
+
+	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
+
+	void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DelataSeconds);
 };
+
+

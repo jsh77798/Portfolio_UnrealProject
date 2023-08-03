@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "UObject/NoExportTypes.h"
+#include <Game/Portfolio_Enums.h>
 #include "MonsterData.generated.h"
 
 /**
@@ -17,11 +18,14 @@ struct PORTFOLIO01_API FMonsterData : public FTableRowBase
 	~FMonsterData(){}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-		int HP;
+	    int HP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 		int ATT;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 		class UBehaviorTree* AI;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+		TMap<AIState, class UAnimMontage*> MapAnimation;
 };

@@ -58,9 +58,8 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	{
 		bBindingsAdded = true;
 
-		// 여기의 내용은 뭐냐?
-		// DefaultPawn_MoveForward 추가되는것 뿐
-		// 축매핑만 하고 있스니다.
+		
+		// 축매핑
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveForward", EKeys::W, 1.f));
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveForward", EKeys::S, -1.f));
 
@@ -98,11 +97,12 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 void APortfolio_Character::MoveRight(float Val)
 {
 	/*
-	if (AniState == EAniState::Attack)
+	if (AniState == EAniState::W_Attack)
 	{
 		return;
 	}
 	*/
+
 	if (Val != 0.f)
 	{
 		if (Controller)
@@ -129,11 +129,12 @@ void APortfolio_Character::MoveRight(float Val)
 void APortfolio_Character::MoveForward(float Val)
 {
 	/*
-	if (AniState == EAniState::Attack)
+	if (AniState == EAniState::W_Attack)
 	{
 		return;
 	}
 	*/
+
 	if (Val != 0.f)
 	{
 
@@ -192,8 +193,9 @@ void APortfolio_Character::IN_AimingAction()
 void APortfolio_Character::OUT_AimingAction()
 {
 	ZoomingIn = 0;
-	AimingActionCheck = 0;
-	AniState = EAniState::Idle;
+    AimingActionCheck = 0;
+    AniState = EAniState::Idle;
+
 }
 
 void APortfolio_Character::AttackAction()
@@ -202,10 +204,10 @@ void APortfolio_Character::AttackAction()
 	// GetMovementComponent()
 	if (AimingActionCheck == 1)
 	{
-	AniState = EAniState::W_Attack;
+	   AniState = EAniState::W_Attack;
 	}
-
-	   return;
+	
+	return;
 }
 
 
