@@ -6,7 +6,7 @@
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "Global/Portfolio_GlobalCharacter.h"
 #include "Game/AI/Portfolio_AIController.h"
-#include "Game/Portfolio_Enums.h"
+#include "Game/AI/Portfolio_MonsterEnums.h"
 #include <BehaviorTree/BlackboardComponent.h>
 #include "BTTask_AIBase.generated.h"
 

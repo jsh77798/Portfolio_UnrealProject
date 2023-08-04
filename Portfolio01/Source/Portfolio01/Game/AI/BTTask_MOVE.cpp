@@ -4,7 +4,7 @@
 #include "Game/AI/BTTask_MOVE.h"
 #include <Global/Portfolio_GlobalCharacter.h>
 #include <Game/AI/Portfolio_AIController.h>
-#include <Game/Portfolio_Enums.h>
+#include <Game/AI/Portfolio_MonsterEnums.h>
 #include <BehaviorTree/BlackboardComponent.h>
 #include "GameFramework/CharacterMovementComponent.h"
 

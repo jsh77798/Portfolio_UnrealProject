@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "UObject/NoExportTypes.h"
-#include <Game/Portfolio_Enums.h>
+#include <Game/AI/Portfolio_MonsterEnums.h>
 #include "MonsterData.generated.h"
 
 /**

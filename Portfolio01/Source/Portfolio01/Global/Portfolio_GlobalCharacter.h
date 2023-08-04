@@ -112,6 +112,8 @@ public:
 	UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		TMap<int, class UAnimMontage*> AllAnimations;
 
+	//UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite)
+	//	TMap<AIState, class UAnimMontage*> AllAnimations;
 
 	class UPortfolio_GlobalAnimInstance* Portfolio_GlobalAnimInstance = nullptr;
 

@@ -2,11 +2,15 @@
 
 
 #include "Portfolio_GameInstance.h"
+#include <Global/Data/GameMeshData.h>
+#include <Global/Data/SubClassData.h>
 #include <Global/Data/MonsterData.h>
+#include "Portfolio_Global.h"
+
 
 UPortfolio_GameInstance::UPortfolio_GameInstance()
 {
-	/*
+	
 	{
 		FString DataPath = TEXT("/Script/Engine.DataTable'/Game/BluePrint/Global/Data/DT_GameMeshData.DT_GameMeshData'");
 		ConstructorHelpers::FObjectFinder<UDataTable> DataTable(*DataPath);
@@ -36,7 +40,7 @@ UPortfolio_GameInstance::UPortfolio_GameInstance()
 			SubClassData = DataTable.Object;
 		}
 	}
-	*/
+	
 
 	{
 
@@ -50,7 +54,7 @@ UPortfolio_GameInstance::UPortfolio_GameInstance()
 
 	}
 
-	//UARGlobal::MainRandom.GenerateNewSeed();
+	UPortfolio_Global::MainRandom.GenerateNewSeed();
 }
 
 UPortfolio_GameInstance::~UPortfolio_GameInstance()
@@ -58,40 +62,40 @@ UPortfolio_GameInstance::~UPortfolio_GameInstance()
 
 }
 
-//TSubclassOf<UObject> UPortfolio_GameInstance::GetSubClass(FName _Name)
-//{
-//	if (nullptr == SubClassData)
-//	{
-//		return nullptr;
-//	}
+TSubclassOf<UObject> UPortfolio_GameInstance::GetSubClass(FName _Name)
+{
+	if (nullptr == SubClassData)
+	{
+		return nullptr;
+	}
 
-	//FSubClassData* FindTable = SubClassData->FindRow<FSubClassData>(_Name, _Name.ToString());
+	FSubClassData* FindTable = SubClassData->FindRow<FSubClassData>(_Name, _Name.ToString());
 
-	//if (nullptr == FindTable)
-	//{
-	//	return nullptr;
-	//}
+	if (nullptr == FindTable)
+	{
+		return nullptr;
+	}
 
-	//return FindTable->Object;
+	return FindTable->Object;
 
-//}
+}
 
-//UStaticMesh* UPortfolio_GameInstance::GetMesh(FName _Name)
-//{
-//	if (nullptr == MeshDatas)
-//	{
-//		return nullptr;
-//	}
+UStaticMesh* UPortfolio_GameInstance::GetMesh(FName _Name)
+{
+	if (nullptr == MeshDatas)
+	{
+		return nullptr;
+	}
 
-	//FGameMeshData* FindTable = MeshDatas->FindRow<FGameMeshData>(_Name, _Name.ToString());
+	FGameMeshData* FindTable = MeshDatas->FindRow<FGameMeshData>(_Name, _Name.ToString());
 
-	//if (nullptr == FindTable)
-	//{
-	//	return nullptr;
-	//}
+	if (nullptr == FindTable)
+	{
+		return nullptr;
+	}
 
-	//return FindTable->Mesh;
-//}
+	return FindTable->Mesh;
+}
 
 
 FMonsterData* UPortfolio_GameInstance::GetMonsterData(FName _Name)

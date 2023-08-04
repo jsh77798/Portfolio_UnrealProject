@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AICharacter.h"
-#include <Game/Portfolio_Enums.h>
+#include <Game/AI/Portfolio_MonsterEnums.h>
 #include <Global/Data/MonsterData.h>
 #include "Portfolio_AIMonster.generated.h"
 
@@ -27,7 +27,10 @@ public:
 	FVector MPrePos;
 	int A = 0;
 
+
+
 private:
+
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FName DataName = "NONE";
 

@@ -36,9 +36,7 @@ enum class EAniState : uint8
 	W_CrouchUP UMETA(DisplayName = "W_CrouchUP"),
 	*/
 
-
-
-
+/*
 UENUM(BlueprintType)
 enum class AIState : uint8
 {
@@ -50,8 +48,4 @@ enum class AIState : uint8
 	ATTACK UMETA(DisplayName = "ATTACK"),
 	DEATH UMETA(DisplayName = "DEATH"),
 };
-
-	//LeftMove UMETA(DisplayName = "LeftMove"),
-	//RightMove UMETA(DisplayName = "RightMove"),
-	//ForwardMove UMETA(DisplayName = "ForwardMove"),
-	//BackwardMove UMETA(DisplayName = "BackwardMove"),
+*/

@@ -4,7 +4,7 @@
 #include "Game/AI/BTTask_RETURN.h"
 #include <Global/Portfolio_GlobalCharacter.h>
 #include <Global/Portfolio_Global.h>
-#include <Game/Portfolio_Enums.h>
+#include <Game/AI/Portfolio_MonsterEnums.h>
 #include <BehaviorTree/BlackboardComponent.h>
 #include "BTTask_IDLE.h"
 #include "Portfolio_AIMonster.h"
