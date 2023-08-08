@@ -28,13 +28,13 @@ public:
 
 private:
 	UPROPERTY()
-		UDataTable* SubClassData;
+	UDataTable* SubClassData;
 
 	UPROPERTY()
-		UDataTable* MeshDatas;
+	UDataTable* MeshDatas;
 
 	UPROPERTY()
-		UDataTable* MonsterDatas;
+	UDataTable* MonsterDatas;
 
 	TArray<UStaticMesh*> Arrmesh;
 };

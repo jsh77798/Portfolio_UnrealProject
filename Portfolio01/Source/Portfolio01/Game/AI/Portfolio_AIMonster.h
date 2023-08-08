@@ -28,7 +28,6 @@ public:
 	int A = 0;
 
 
-
 private:
 
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

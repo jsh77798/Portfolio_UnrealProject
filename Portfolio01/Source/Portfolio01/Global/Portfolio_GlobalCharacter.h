@@ -16,6 +16,21 @@ public:
 	// Sets default values for this character's properties
 	APortfolio_GlobalCharacter();
 
+	void SetHP(int _HP)
+	{
+		HP -= _HP;
+	}
+
+	void AddHP(int _HP)
+	{
+		HP += _HP;
+	}
+
+	int GetHP()
+	{
+		return HP;
+	}
+
 	int GetAniState()
 	{
 		return AniState;
@@ -99,6 +114,18 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+	UFUNCTION()
+		void OverLap(class UPrimitiveComponent* OverlappedComponent,
+			class AActor* OtherActor,
+			class UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
+
+
+	virtual void Damage(AActor* _Actor) {}
+
+	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TArray<UActorComponent*> MgrComponent;
 
 
 public:	
@@ -117,4 +144,6 @@ public:
 
 	class UPortfolio_GlobalAnimInstance* Portfolio_GlobalAnimInstance = nullptr;
 
+	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int HP = 1;
 };

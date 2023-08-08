@@ -14,6 +14,18 @@ APortfolio_Character::APortfolio_Character()
 	BaseLookUpRate = 25.f;
 
 
+	//Create our components 스프링암 설정
+	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
+	OurCameraSpringArm->SetupAttachment(RootComponent);
+	OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
+	OurCameraSpringArm->TargetArmLength = 140.0f;
+	OurCameraSpringArm->bEnableCameraLag = true;
+	OurCameraSpringArm->CameraLagSpeed = 10.0f;
+	//Take control of the default Player
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+
 	//캐릭터 이동 회전 (#include "GameFramework/CharacterMovementComponent.h" 헤더 필요)
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
@@ -31,20 +43,22 @@ void APortfolio_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/*
-	class UAnimMontage* Montage = AllAnimations[AniState];
-
-	if (nullptr == Montage)
+	//Zoom in if ZoomIn button is down, zoom back out if it's not
 	{
-		return;
+		if (bZoomingIn)
+		{
+			ZoomFactor += DeltaTime / 0.15f;         //Zoom in over half a second
+		}
+		else
+		{
+			ZoomFactor -= DeltaTime / 0.15f;        //Zoom out over a quarter of a second
+		}
+		ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
+		//Blend our camera's FOV and our SpringArm's length based on ZoomFactor
+		OurCameraSpringArm->TargetArmLength = FMath::Lerp<float>(140.0f, 80.0f, ZoomFactor);
+		OurCameraSpringArm->SocketOffset.Y = FMath::Lerp<float>(55.0f, 80.0f, ZoomFactor);
+		OurCameraSpringArm->SocketOffset.Z = FMath::Lerp<float>(65.0f, 70.0f, ZoomFactor);
 	}
-
-	if (false == GetMesh()->GetAnimInstance()->Montage_IsPlaying(Montage))
-	{
-		GetMesh()->GetAnimInstance()->Montage_Play(Montage, 1.0f);
-	}
-	*/
-
 }
 
 // Called to bind functionality to input
@@ -72,6 +86,7 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerLookUp", EKeys::MouseY, -1.f));
 		
+		//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerAimingCheck", EKeys::RightMouseButton));
 		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAiming"), EKeys::RightMouseButton));
     	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAttack"), EKeys::LeftMouseButton));
 
@@ -87,6 +102,7 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("PlayerLookUp", this, &APortfolio_Character::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("PlayerLookUpRate", this, &APortfolio_Character::LookUpAtRate);
 
+	//PlayerInputComponent->BindAxis("PlayerAimingCheck", this, &APortfolio_Character::IN_AimingAction_Check);
 	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Pressed , this, &APortfolio_Character::IN_AimingAction);
 	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Released, this, &APortfolio_Character::OUT_AimingAction);
 	PlayerInputComponent->BindAction("PlayerAttack", EInputEvent::IE_Pressed, this, &APortfolio_Character::AttackAction);
@@ -128,13 +144,6 @@ void APortfolio_Character::MoveRight(float Val)
 
 void APortfolio_Character::MoveForward(float Val)
 {
-	/*
-	if (AniState == EAniState::W_Attack)
-	{
-		return;
-	}
-	*/
-
 	if (Val != 0.f)
 	{
 
@@ -181,35 +190,41 @@ void APortfolio_Character::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds() * CustomTimeDilation);
 }
 
-
 void APortfolio_Character::IN_AimingAction()
 {
-	ZoomingIn = 1;
+    AniState = EAniState::W_Aiming;
+
 	AimingActionCheck = 1;
-	AniState = EAniState::W_Aiming;
-	
+	//ZoomingIn = 1;
+	bZoomingIn = true;
 }
 
 void APortfolio_Character::OUT_AimingAction()
 {
-	ZoomingIn = 0;
-    AimingActionCheck = 0;
-    AniState = EAniState::Idle;
+	if (AimingActionCheck == 0)
+	{
+		AniState = EAniState::Idle;
+	}
+	else
+	{
+		AniState = EAniState::Idle;
+		AimingActionCheck = 0;
+	}
 
+	bZoomingIn = false;
 }
 
 void APortfolio_Character::AttackAction()
 {
 	// 무브먼트 컴포넌트를 통해서 한다.
 	// GetMovementComponent()
-	if (AimingActionCheck == 1)
+	if (AimingActionCheck == 1 && AniState == EAniState::W_Aiming)
 	{
-	   AniState = EAniState::W_Attack;
+	    AniState = EAniState::W_Attack;
 	}
-	
+   
 	return;
 }
-
 
 
 void APortfolio_Character::AnimationTick()

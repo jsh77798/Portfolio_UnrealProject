@@ -11,7 +11,8 @@
 // 일단 써치 범위 바깥으로 이동하면
 // Return 상태로 전환하는 것은 2가지 상황이 존재한다.
 // 1. 그냥 플레이어가 너무 멀어져서 나는 돌아간다.
-// 2. 내 원래자리(만들어진 순간에 자신의 위치.)에서 너무 말리 떨어졌다.
+// 2. 내 원래자리(만들어진 순간에 자신의 위치.)에서 너무 멀리 떨어졌다.
+
 
 UBTTask_MOVE::UBTTask_MOVE()
 {
@@ -28,7 +29,7 @@ EBTNodeResult::Type UBTTask_MOVE::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 
 	if (nullptr != MoveCom)
 	{
-		MoveCom->MaxWalkSpeed = 300.0f;
+		MoveCom->MaxWalkSpeed = 140.0f;
 	}
 
 	return EBTNodeResult::Type::InProgress;

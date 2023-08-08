@@ -30,7 +30,7 @@ UPortfolio_GameInstance::UPortfolio_GameInstance()
 			}
 		}
 	}
-
+	
 	{
 		FString DataPath = TEXT("/Script/Engine.DataTable'/Game/BluePrint/Global/Data/DT_SubClassData.DT_SubClassData'");
 		ConstructorHelpers::FObjectFinder<UDataTable> DataTable(*DataPath);
@@ -43,7 +43,7 @@ UPortfolio_GameInstance::UPortfolio_GameInstance()
 	
 
 	{
-
+	
 		FString DataPath = TEXT("/Script/Engine.DataTable'/Game/BluePrint/Character_Monster/DT_MonsterData.DT_MonsterData'");
 		ConstructorHelpers::FObjectFinder<UDataTable> DataTable(*DataPath);
 

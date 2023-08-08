@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Portfolio_Enums.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Portfolio_Character.generated.h"
 
 UCLASS()
@@ -35,15 +36,26 @@ public:
 	void MoveForward(float Val);
 	void TurnAtRate(float Rate);
 	void LookUpAtRate(float Rate);
+	//void IN_AimingAction_Check(float Val);
 	void IN_AimingAction();
 	void OUT_AimingAction();
 	void AttackAction();
-
+	
 	int AimingActionCheck = 0;
 
-	UPROPERTY()
-	int ZoomingIn;
+	FVector2D MovementInput;
+	FVector2D CameraInput;
+	float ZoomFactor;
+	bool bZoomingIn;
+
 	
+	UPROPERTY(EditAnywhere)
+		USpringArmComponent* OurCameraSpringArm;
+	//타겟암 길이: 160.0
+	//소켓 오프셋: 0.0 / 55.0 / 55.0
+	//타깃 오프셋: 0.0 / 0.0 / 0.0
+	
+	//UCameraComponent* OurCamera;
 
 
 

@@ -16,13 +16,12 @@ void APortfolio_AIMonster::BeginPlay()
 
 		CurMonsterData = Inst->GetMonsterData(DataName);
 
-		//SetAllAnimation(CurMonsterData->MapAnimation);
-		//SetAniState(AIState::DEATH);
+		SetAllAnimation(CurMonsterData->MapAnimation);
+		SetAniState(AIState::DEATH);
 
 	}
 
 	Super::BeginPlay();
-
 
 	GetBlackboardComponent()->SetValueAsEnum(TEXT("AIState"), static_cast<uint8>(AIState::IDLE));
 	GetBlackboardComponent()->SetValueAsString(TEXT("TargetTag"), TEXT("Player"));

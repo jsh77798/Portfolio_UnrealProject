@@ -40,7 +40,7 @@ AIState UBTTask_AIBase::GetAiState(UBehaviorTreeComponent& OwnerComp)
 	if (nullptr == BlockBoard)
 	{
 		UE_LOG(LogTemp, Error, TEXT("if (nullptr == BlockBoard)"), __FUNCTION__, __LINE__);
-		return AIState::NONE;
+		return AIState::IDLE;
 	}
 
 	uint8 Enum = BlockBoard->GetValueAsEnum(TEXT("AIState"));
