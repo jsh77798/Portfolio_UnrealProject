@@ -27,8 +27,8 @@ APortfolio_Character::APortfolio_Character()
 
 
 	//캐릭터 이동 회전 (#include "GameFramework/CharacterMovementComponent.h" 헤더 필요)
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
+	//GetCharacterMovement()->bOrientRotationToMovement = true;
+	//GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +43,22 @@ void APortfolio_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//use controller rotation yaw 설정
+	{
+		if (AniState == EAniState::Idle || AniState == EAniState::ForwardMove )
+		{
+			bUseControllerRotationYaw = false;
+
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+			GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
+		}
+		else 
+		{
+		    bUseControllerRotationYaw = true;
+		}
+	}
+
+
 	//Zoom in if ZoomIn button is down, zoom back out if it's not
 	{
 		if (bZoomingIn)
@@ -55,11 +71,13 @@ void APortfolio_Character::Tick(float DeltaTime)
 		}
 		ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
 		//Blend our camera's FOV and our SpringArm's length based on ZoomFactor
+		//FMath::Lerp<float>(Af, Bf, C) -> C의 속력으로 A-B를 한다.
 		OurCameraSpringArm->TargetArmLength = FMath::Lerp<float>(140.0f, 80.0f, ZoomFactor);
 		OurCameraSpringArm->SocketOffset.Y = FMath::Lerp<float>(55.0f, 80.0f, ZoomFactor);
 		OurCameraSpringArm->SocketOffset.Z = FMath::Lerp<float>(65.0f, 70.0f, ZoomFactor);
 	}
 }
+
 
 // Called to bind functionality to input
 void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -149,6 +167,17 @@ void APortfolio_Character::MoveForward(float Val)
 
 		if (Controller)
 		{
+			
+			FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
+			const FVector Direction = FRotationMatrix(YawRotation).GetScaledAxis(EAxis::X);
+			AddMovementInput(Direction, Val);
+
+			AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
+			return;
+
+			/*
+			
 			// 컨트롤러는 기본적으로
 			// charcter 하나씩 붙어 있습니다.
 			FRotator const ControlSpaceRot = Controller->GetControlRotation();
@@ -160,9 +189,7 @@ void APortfolio_Character::MoveForward(float Val)
 			// 지금은 TPS를 하고 있기 때문에 컨트롤러의 회전이나 액터의 회전이나 같아요.
 			// AddMovementInput(GetActorForwardVector(), Val);
 
-			AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
-			return;
-
+			*/
 		}
 	}
 	else
