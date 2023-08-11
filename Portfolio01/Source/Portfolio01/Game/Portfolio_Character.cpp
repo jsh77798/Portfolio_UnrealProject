@@ -35,8 +35,9 @@ APortfolio_Character::APortfolio_Character()
 void APortfolio_Character::BeginPlay()
 {
 	Super::BeginPlay();
+
 	//GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddUniqueDynamic(this, &APortfolio_Character::AnimNotifyBegin);
-	GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APortfolio_Character::AnimNotifyBegin);
+	//GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APortfolio_Character::AnimNotifyBegin);
 }
 
 // Called every frame
