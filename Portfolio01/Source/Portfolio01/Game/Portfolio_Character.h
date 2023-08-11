@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include <Global/Portfolio_GameInstance.h>
+#include <Global/Portfolio_Tile.h>
+#include "Player_AnimInstance.h"
 #include "Portfolio_Enums.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Portfolio_Character.generated.h"
@@ -22,6 +25,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AnimationTick();
 
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,6 +36,12 @@ protected:
 
 	
 public:	
+
+
+	class UPlayer_AnimInstance* GetGlobalAnimInstance()
+	{
+		return GlobalAnimInstance;
+	}
 
 	void MoveRight(float Val);
 	void MoveForward(float Val);
@@ -58,7 +69,6 @@ public:
 	//UCameraComponent* OurCamera;
 
 
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
 		float BaseTurnRate;
 
@@ -74,5 +84,12 @@ public:
 	UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite)
 		TMap<EAniState, class UAnimMontage*> AllAnimations;
 
+	UFUNCTION()
+		void AnimNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
 
+	float Speed = 1000.0f;
+
+private:
+	class UPlayer_AnimInstance* GlobalAnimInstance = nullptr;
 };
+

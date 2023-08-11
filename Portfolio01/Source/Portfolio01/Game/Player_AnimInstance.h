@@ -19,7 +19,10 @@ public:
 	UPROPERTY(Category = "GameModeValue", EditAnywhere, BlueprintReadWrite)
 		EAniState AniState = EAniState::Idle;
 
+
+
 	TMap<EAniState, class UAnimMontage*> AllAnimations;
+
 
 	UFUNCTION()
 		void MontageEnd(UAnimMontage* Anim, bool _Inter);

@@ -35,7 +35,8 @@ APortfolio_Character::APortfolio_Character()
 void APortfolio_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddUniqueDynamic(this, &APortfolio_Character::AnimNotifyBegin);
+	GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APortfolio_Character::AnimNotifyBegin);
 }
 
 // Called every frame
@@ -110,9 +111,9 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	}
 
-	// 키와 함수를 연결합니다.
+	// 키와 함수를 연결한다
 	// 이 키가 눌리면 이 함수를 실행시켜줘인데.
-	// 축일때는 일단 계속 실행시켜줘.
+	// BindAxis_축일때는 일단 계속 실행시켜줘.
 	PlayerInputComponent->BindAxis("PlayerMoveForward", this, &APortfolio_Character::MoveForward);
 	PlayerInputComponent->BindAxis("PlayerMoveRight", this, &APortfolio_Character::MoveRight);
 	PlayerInputComponent->BindAxis("PlayerTurn", this, &APortfolio_Character::AddControllerYawInput);
@@ -176,20 +177,6 @@ void APortfolio_Character::MoveForward(float Val)
 			AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
 			return;
 
-			/*
-			
-			// 컨트롤러는 기본적으로
-			// charcter 하나씩 붙어 있습니다.
-			FRotator const ControlSpaceRot = Controller->GetControlRotation();
-
-			// 이건 방향일 뿐입니다.
-			// transform to world space and add it
-			AddMovementInput(FRotationMatrix(ControlSpaceRot).GetScaledAxis(EAxis::X), Val);
-			// 탑뷰게임이면 다르게 나오게 되는데.
-			// 지금은 TPS를 하고 있기 때문에 컨트롤러의 회전이나 액터의 회전이나 같아요.
-			// AddMovementInput(GetActorForwardVector(), Val);
-
-			*/
 		}
 	}
 	else
@@ -252,6 +239,45 @@ void APortfolio_Character::AttackAction()
    
 	return;
 }
+
+void APortfolio_Character::AnimNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+
+	TSubclassOf<UObject> Effect = Inst->GetSubClass(TEXT("ShotEffect"));
+	TSubclassOf<UObject> RangeAttack = Inst->GetSubClass(TEXT("PlayerRangeAttack"));
+
+	/*
+	if (nullptr != Effect)
+	{
+		AActor* Actor = GetWorld()->SpawnActor<AActor>(Effect);
+		Actor->SetActorLocation(GetActorLocation());
+		Actor->SetActorRotation(GetActorRotation());
+	}
+	*/
+	if (nullptr != Effect)
+	{
+		FTransform Trans;
+		FVector Pos;
+		TArray<UActorComponent*> MeshEffects = GetComponentsByTag(USceneComponent::StaticClass(), TEXT("WeaponEffect"));
+		TArray<UActorComponent*> StaticMeshs = GetComponentsByTag(USceneComponent::StaticClass(), TEXT("WeaponMesh"));
+
+		USceneComponent* EffectCom = Cast<USceneComponent>(MeshEffects[0]);
+		Pos = EffectCom->GetComponentToWorld().GetLocation();
+
+		// 발사체 만들기
+		{
+			AActor* Actor = GetWorld()->SpawnActor<AActor>(RangeAttack);
+			Actor->Tags.Add(TEXT("Damage"));
+			APortfolio_Tile* ProjectTile = Cast<APortfolio_Tile>(Actor);
+			ProjectTile->SetActorLocation(Pos);
+			ProjectTile->SetActorRotation(GetActorRotation());
+			ProjectTile->GetSphereComponent()->SetCollisionProfileName(TEXT("PlayerAttack"), true);
+			
+		}
+	}
+}
+
 
 
 void APortfolio_Character::AnimationTick()
