@@ -51,15 +51,33 @@ public:
 	void IN_AimingAction();
 	void OUT_AimingAction();
 	void AttackAction();
+
+	void Run();
+	void Crouch();
+
+	void ZoomCheck(float *_A, float *_B, float *_C, float* _S);
+	float A;//타겟암 길이
+	float B;//타겟암 Y축
+	float C;//타겟암 Z축
+	float S;//속력
+
+	int RunCheck = 0;
+	bool RunZooming;
+
+	int CrouchCheck = 0;
+	bool CrouchZooming;
 	
+
 	int AimingActionCheck = 0;
+	int AttackCheck = 0;
 
 	FVector2D MovementInput;
 	FVector2D CameraInput;
 	float ZoomFactor;
 	bool bZoomingIn;
 
-	
+	UCharacterMovementComponent* MoveCom;
+
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* OurCameraSpringArm;
 	//타겟암 길이: 160.0

@@ -74,7 +74,7 @@ void UPlayer_AnimInstance::MontageEnd(UAnimMontage* Anim, bool _Inter)
 
 	// Anim 종료된 몽타주
 
-	
+
 	if (AllAnimations[EAniState::W_Attack] == Anim)
 	{
 		if (AniState == EAniState::Idle)
@@ -84,13 +84,42 @@ void UPlayer_AnimInstance::MontageEnd(UAnimMontage* Anim, bool _Inter)
 			//Chracter->AniState = AniState;
 			//Montage_Play(AllAnimations[EAniState::Idle], 1.0f);
 		}
-		else 
+		else
 		{
 
-		    AniState = EAniState::W_Aiming;
-		    Chracter->AniState = AniState;
-		    Montage_Play(AllAnimations[EAniState::W_Aiming], 1.0f);
+			AniState = EAniState::W_Aiming;
+			Chracter->AniState = AniState;
+			Montage_Play(AllAnimations[EAniState::W_Aiming], 1.0f);
 		}
 	}
 
+
+	if (AllAnimations[EAniState::CrouchOn] == Anim)
+	{
+		if (AniState == EAniState::Crouch_Idle)
+		{
+			return;
+		}
+		else
+		{
+			AniState = EAniState::Crouch_Idle;
+			Chracter->AniState = AniState;
+			Montage_Play(AllAnimations[EAniState::Crouch_Idle], 1.0f);
+		}
+	}
+
+	if (AllAnimations[EAniState::CrouchOff] == Anim)
+	{
+		if (AniState == EAniState::Idle)
+		{
+			return;
+		}
+		else
+		{
+
+			AniState = EAniState::Idle;
+			Chracter->AniState = AniState;
+			Montage_Play(AllAnimations[EAniState::Idle], 1.0f);
+		}
+	}
 }

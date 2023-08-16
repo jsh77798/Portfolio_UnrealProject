@@ -17,13 +17,26 @@ enum class EAniState : uint8
 	ForwardMove UMETA(DisplayName = "ForwardMove"),
 	BackwardMove UMETA(DisplayName = "BackwardMove"),
 	W_Aiming UMETA(DisplayName = "W_Aiming"),
+	Aiming_LeftMove UMETA(DisplayName = "Aiming_LeftMove"),
+	Aiming_RightMove UMETA(DisplayName = "Aiming_RightMove"),
+	Aiming_ForwardMove UMETA(DisplayName = "Aiming_ForwardMove"),
+	Aiming_BackwardMove UMETA(DisplayName = "Aiming_BackwardMove"),
 	W_Attack UMETA(DisplayName = "W_Attack"),
+	LeftRun UMETA(DisplayName = "LeftRun"),
+	RightRun UMETA(DisplayName = "RightRun"),
+	ForwardRun UMETA(DisplayName = "ForwardRun"),
+	BackwardRun UMETA(DisplayName = "BackwardRun"),
+	CrouchOn UMETA(DisplayName = "CrouchOn"),
+	CrouchOff UMETA(DisplayName = "CrouchOff"),
+	Crouch_Idle UMETA(DisplayName = "Crouch_Idle"),
+	Crouch_LeftMove UMETA(DisplayName = "Crouch_LeftMove"),
+	Crouch_RightMove UMETA(DisplayName = "Crouch_RightMove"),
+	Crouch_ForwardMove UMETA(DisplayName = "Crouch_ForwardMove"),
+	Crouch_BackwardMove UMETA(DisplayName = "Crouch_BackwardMove"),
 };
 
 	/*
 	Run UMETA(DisplayName = "Run"),
-	Crouch UMETA(DisplayName = "Crouch"),
-	CrouchUP UMETA(DisplayName = "CrouchUP"),
 
 
 	W_Idle UMETA(DisplayName = "W_Idle"),

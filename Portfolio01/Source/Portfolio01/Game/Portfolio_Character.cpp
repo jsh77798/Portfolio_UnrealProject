@@ -13,6 +13,10 @@ APortfolio_Character::APortfolio_Character()
 	BaseTurnRate = 25.f;
 	BaseLookUpRate = 25.f;
 
+	//캐릭터 이동속도 설정
+	MoveCom = Cast<UCharacterMovementComponent>(GetMovementComponent());
+	MoveCom->MaxWalkSpeed = 350.0f; 
+	
 
 	//Create our components 스프링암 설정
 	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
@@ -20,6 +24,8 @@ APortfolio_Character::APortfolio_Character()
 	OurCameraSpringArm->SetupAttachment(RootComponent);
 	OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
 	OurCameraSpringArm->TargetArmLength = 140.0f;
+	OurCameraSpringArm->SocketOffset.Y = 55.0f;
+	OurCameraSpringArm->SocketOffset.Z = 65.0f;
 	OurCameraSpringArm->bEnableCameraLag = true;
 	OurCameraSpringArm->CameraLagSpeed = 10.0f;
 	//Take control of the default Player
@@ -45,9 +51,22 @@ void APortfolio_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//Run 상태확인 및 설정
+	{
+	    if (AniState == EAniState::Idle)
+	    {
+	    	RunCheck = 0;
+			RunZooming = false;
+	    }
+	    //if (RunAnimCheck == 1)
+	    //{
+	    //   AniState = EAniState::Run;
+	    //}
+	}
+
 	//use controller rotation yaw 설정
 	{
-		if (AniState == EAniState::Idle || AniState == EAniState::ForwardMove )
+		if (AniState == EAniState::Idle || AniState == EAniState::ForwardMove || RunCheck == 1)
 		{
 			bUseControllerRotationYaw = false;
 
@@ -57,29 +76,63 @@ void APortfolio_Character::Tick(float DeltaTime)
 		else 
 		{
 		    bUseControllerRotationYaw = true;
+
 		}
 	}
 
 
 	//Zoom in if ZoomIn button is down, zoom back out if it's not
 	{
-		if (bZoomingIn)
+		if (bZoomingIn || RunZooming || CrouchZooming)
 		{
-			ZoomFactor += DeltaTime / 0.15f;         //Zoom in over half a second
+			ZoomFactor += DeltaTime / S;         //Zoom in over half a second
 		}
 		else
 		{
-			ZoomFactor -= DeltaTime / 0.15f;        //Zoom out over a quarter of a second
+			ZoomFactor -= DeltaTime / S;        //Zoom out over a quarter of a second
 		}
 		ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
 		//Blend our camera's FOV and our SpringArm's length based on ZoomFactor
 		//FMath::Lerp<float>(Af, Bf, C) -> C의 속력으로 A-B를 한다.
-		OurCameraSpringArm->TargetArmLength = FMath::Lerp<float>(140.0f, 80.0f, ZoomFactor);
-		OurCameraSpringArm->SocketOffset.Y = FMath::Lerp<float>(55.0f, 80.0f, ZoomFactor);
-		OurCameraSpringArm->SocketOffset.Z = FMath::Lerp<float>(65.0f, 70.0f, ZoomFactor);
+		
+		OurCameraSpringArm->TargetArmLength = FMath::Lerp<float>(140.0f, A, ZoomFactor);
+		OurCameraSpringArm->SocketOffset.Y = FMath::Lerp<float>(55.0f, B, ZoomFactor);
+		OurCameraSpringArm->SocketOffset.Z = FMath::Lerp<float>(65.0f, C, ZoomFactor);
 	}
+
+
+	//공격에서 AttackCheck == 1이 되면 여기서 공격실행
+	{
+		if (AttackCheck == 1) {
+
+	        if (AimingActionCheck == 1 && AniState == EAniState::W_Aiming)
+	        {
+		       AniState = EAniState::W_Attack;
+			   AttackCheck= 0;
+	        }
+ 
+	        if (AimingActionCheck == 1
+		        || AniState == EAniState::Aiming_ForwardMove
+		        || AniState == EAniState::Aiming_BackwardMove
+		        || AniState == EAniState::Aiming_RightMove
+		        || AniState == EAniState::Aiming_LeftMove)
+	        {
+		        AniState = EAniState::W_Attack;
+				AttackCheck= 0;
+	        }
+		}
+	}
+
 }
 
+void APortfolio_Character::ZoomCheck(float *_A, float *_B, float *_C, float* _S)
+{
+	A = *_A;
+	B = *_B;
+	C = *_C;
+	S = *_S;
+
+}
 
 // Called to bind functionality to input
 void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -110,6 +163,8 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAiming"), EKeys::RightMouseButton));
     	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAttack"), EKeys::LeftMouseButton));
 
+		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerRun"), EKeys::LeftShift));
+		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerCrouch"), EKeys::Q));
 	}
 
 	// 키와 함수를 연결한다
@@ -126,6 +181,9 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Pressed , this, &APortfolio_Character::IN_AimingAction);
 	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Released, this, &APortfolio_Character::OUT_AimingAction);
 	PlayerInputComponent->BindAction("PlayerAttack", EInputEvent::IE_Pressed, this, &APortfolio_Character::AttackAction);
+
+	PlayerInputComponent->BindAction("PlayerRun", EInputEvent::IE_Pressed, this, &APortfolio_Character::Run);
+	PlayerInputComponent->BindAction("PlayerCrouch", EInputEvent::IE_Pressed, this, &APortfolio_Character::Crouch);
 	
 }
 
@@ -148,15 +206,61 @@ void APortfolio_Character::MoveRight(float Val)
 			// 현재 내 회전을 가져와서 y축에 해당하는 축벡터를 얻어오는 겁니다.
 			AddMovementInput(FRotationMatrix(ControlSpaceRot).GetScaledAxis(EAxis::Y), Val);
 
-			AniState = Val > 0.f ? EAniState::RightMove : EAniState::LeftMove;
-			return;
+			if (RunCheck == 1 && AimingActionCheck == 0 && AniState != EAniState::Idle)
+			{
+				MoveCom->MaxWalkSpeed = 420.0f;
+				RunZooming = true;
+				AniState = Val > 0.f ? EAniState::RightRun : EAniState::LeftRun;
+				return;
+			}
+			
+			if (CrouchCheck == 1)
+			{
+				MoveCom->MaxWalkSpeed = 250.0f;
+				AniState = Val > 0.f ? EAniState::Crouch_RightMove : EAniState::Crouch_LeftMove;
+				return;
+			}
+
+			
+		    {
+			    if (AimingActionCheck == 0) 
+			    {
+			  	    MoveCom->MaxWalkSpeed = 350.0f;
+				    AniState = Val > 0.f ? EAniState::RightMove : EAniState::LeftMove;
+				    return;
+			    }
+			    else 
+			    {
+			    	MoveCom->MaxWalkSpeed = 300.0f;
+			        AniState = Val > 0.f ? EAniState::Aiming_RightMove : EAniState::Aiming_LeftMove;
+				    return;
+		  	    }  
+		    }
+
+
 		}
 	}
 	else
 	{
-		if (AniState == EAniState::RightMove || AniState == EAniState::LeftMove)
+		if ( AniState == EAniState::RightMove || AniState == EAniState::LeftMove )
 		{
 			AniState = EAniState::Idle;
+		}
+		if ( AniState == EAniState::Aiming_RightMove || AniState == EAniState::Aiming_LeftMove )
+		{
+			AniState = EAniState::W_Aiming;
+		}
+
+		if (AniState == EAniState::RightRun || AniState == EAniState::LeftRun)
+		{
+			AniState = EAniState::Idle;
+			RunZooming = false;
+			RunCheck = 0;
+		}
+
+		if (AniState == EAniState::Crouch_RightMove || AniState == EAniState::Crouch_LeftMove)
+		{
+			AniState = EAniState::Crouch_Idle;
 		}
 	}
 }
@@ -175,16 +279,61 @@ void APortfolio_Character::MoveForward(float Val)
 			const FVector Direction = FRotationMatrix(YawRotation).GetScaledAxis(EAxis::X);
 			AddMovementInput(Direction, Val);
 
-			AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
-			return;
+
+			if (RunCheck == 1 && AimingActionCheck == 0 && AniState != EAniState::Idle)
+			{
+				MoveCom->MaxWalkSpeed = 420.0f;
+				RunZooming = true;
+				AniState = Val > 0.f ? EAniState::ForwardRun : EAniState::BackwardRun;
+				return;
+			}
+
+			if (CrouchCheck == 1)
+			{
+				MoveCom->MaxWalkSpeed = 250.0f;
+				AniState = Val > 0.f ? EAniState::Crouch_ForwardMove : EAniState::Crouch_BackwardMove;
+				return;
+			}
+
+			
+			{
+				if (AimingActionCheck == 0)
+				{
+					MoveCom->MaxWalkSpeed = 350.0f;
+					AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
+					return;
+				}
+				else
+				{
+					MoveCom->MaxWalkSpeed = 300.0f;
+					AniState = Val > 0.f ? EAniState::Aiming_ForwardMove : EAniState::Aiming_BackwardMove;
+					return;
+				}
+			}
 
 		}
 	}
 	else
 	{
-		if (AniState == EAniState::ForwardMove || AniState == EAniState::BackwardMove)
+		if ( AniState == EAniState::ForwardMove || AniState == EAniState::BackwardMove )
 		{
 			AniState = EAniState::Idle;
+		}
+		if (AniState == EAniState::Aiming_ForwardMove || AniState == EAniState::Aiming_BackwardMove)
+		{
+			AniState = EAniState::W_Aiming;
+		}
+
+		if (AniState == EAniState::ForwardRun || AniState == EAniState::BackwardRun)
+		{
+			AniState = EAniState::Idle;
+			RunZooming = false;
+			RunCheck = 0;
+		}
+
+		if (AniState == EAniState::Crouch_ForwardMove || AniState == EAniState::Crouch_BackwardMove)
+		{
+			AniState = EAniState::Crouch_Idle;
 		}
 	}
 
@@ -209,6 +358,15 @@ void APortfolio_Character::IN_AimingAction()
 {
     AniState = EAniState::W_Aiming;
 
+	float a = 80.0f;
+	float b = 80.0f;
+	float c = 70.0f;
+	float s = 0.15f;
+	ZoomCheck(&a, &b, &c, &s);
+
+	RunCheck = 0;
+	CrouchCheck = 0;
+	CrouchZooming = false;
 	AimingActionCheck = 1;
 	//ZoomingIn = 1;
 	bZoomingIn = true;
@@ -233,11 +391,24 @@ void APortfolio_Character::AttackAction()
 {
 	// 무브먼트 컴포넌트를 통해서 한다.
 	// GetMovementComponent()
-	if (AimingActionCheck == 1 && AniState == EAniState::W_Aiming)
+	/*
+	if ( AimingActionCheck == 1 && AniState == EAniState::W_Aiming )
 	{
 	    AniState = EAniState::W_Attack;
 	}
-   
+
+	if (AimingActionCheck == 1 
+		|| AniState == EAniState::Aiming_ForwardMove
+		|| AniState == EAniState::Aiming_BackwardMove
+		|| AniState == EAniState::Aiming_RightMove
+		|| AniState == EAniState::Aiming_LeftMove )
+	{
+		AniState = EAniState::W_Attack;
+    }
+	*/
+
+	//Tick에서 공격
+	AttackCheck = 1;
 	return;
 }
 
@@ -279,7 +450,58 @@ void APortfolio_Character::AnimNotifyBegin(FName NotifyName, const FBranchingPoi
 	}
 }
 
+void APortfolio_Character::Run() 
+{
+	float a = 145.0f;
+	float b = 45.0f;
+	float c = 60.0f;
+	float s = 0.35f;
 
+	if (RunCheck == 0)
+	{
+		CrouchCheck = 0;
+		CrouchZooming = false;
+
+		RunCheck = 1;
+
+		ZoomCheck(&a, &b, &c, &s);
+
+		return;
+	}
+	else
+	{
+		RunZooming = false;
+		RunCheck = 0;
+		return;
+	}
+}
+
+void APortfolio_Character::Crouch() 
+{
+	float a = 150.0f;
+	float b = 55.0f;
+	float c = 50.0f;
+	float s = 0.35f;
+	if (CrouchCheck == 0 && AimingActionCheck == 0)
+	{
+		RunCheck = 0;
+		AimingActionCheck = 0;
+		bZoomingIn = false;
+
+		ZoomCheck(&a, &b, &c, &s);
+		CrouchZooming = true;
+	    CrouchCheck = 1;
+		AniState = EAniState::CrouchOn;
+		return;
+	}
+	else
+	{
+		AniState = EAniState::CrouchOff;
+		CrouchZooming = false;
+		CrouchCheck = 0;
+		return;
+	}
+}
 
 void APortfolio_Character::AnimationTick()
 {
