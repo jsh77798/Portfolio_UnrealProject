@@ -26,7 +26,6 @@ public:
 	void AnimationTick();
 
 
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,7 +36,6 @@ protected:
 	
 public:	
 
-
 	class UPlayer_AnimInstance* GetGlobalAnimInstance()
 	{
 		return GlobalAnimInstance;
@@ -47,7 +45,6 @@ public:
 	void MoveForward(float Val);
 	void TurnAtRate(float Rate);
 	void LookUpAtRate(float Rate);
-	//void IN_AimingAction_Check(float Val);
 	void IN_AimingAction();
 	void OUT_AimingAction();
 	void AttackAction();
@@ -56,10 +53,10 @@ public:
 	void Crouch();
 
 	void ZoomCheck(float *_A, float *_B, float *_C, float* _S);
-	float A;//타겟암 길이
-	float B;//타겟암 Y축
-	float C;//타겟암 Z축
-	float S;//속력
+	float A; //타겟암 길이
+	float B; //타겟암 Y축
+	float C; //타겟암 Z축
+	float S; //속력
 
 	int RunCheck = 0;
 	bool RunZooming;
@@ -80,8 +77,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* OurCameraSpringArm;
-	//타겟암 길이: 160.0
-	//소켓 오프셋: 0.0 / 55.0 / 55.0
+	//타겟암 길이: 140.0
+	//소켓 오프셋: 0.0 / 55.0 / 65.0
 	//타깃 오프셋: 0.0 / 0.0 / 0.0
 	
 	//UCameraComponent* OurCamera;
@@ -93,10 +90,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
 		float BaseLookUpRate;
 
-
 	UPROPERTY(Category = "GameModeValue", EditAnywhere, BlueprintReadWrite)
 		EAniState AniState = EAniState::Idle;
-
 
 	//몽타주 애니메이션 블루프린트내 Map가져오기
 	UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite)

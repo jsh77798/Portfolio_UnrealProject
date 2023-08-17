@@ -13,11 +13,10 @@ APortfolio_Character::APortfolio_Character()
 	BaseTurnRate = 25.f;
 	BaseLookUpRate = 25.f;
 
-	//캐릭터 이동속도 설정
+	//캐릭터 기본 이동속도 설정
 	MoveCom = Cast<UCharacterMovementComponent>(GetMovementComponent());
 	MoveCom->MaxWalkSpeed = 350.0f; 
 	
-
 	//Create our components 스프링암 설정
 	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
@@ -30,7 +29,6 @@ APortfolio_Character::APortfolio_Character()
 	OurCameraSpringArm->CameraLagSpeed = 10.0f;
 	//Take control of the default Player
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
-
 
 	//캐릭터 이동 회전 (#include "GameFramework/CharacterMovementComponent.h" 헤더 필요)
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -58,10 +56,6 @@ void APortfolio_Character::Tick(float DeltaTime)
 	    	RunCheck = 0;
 			RunZooming = false;
 	    }
-	    //if (RunAnimCheck == 1)
-	    //{
-	    //   AniState = EAniState::Run;
-	    //}
 	}
 
 	//use controller rotation yaw 설정
@@ -76,10 +70,8 @@ void APortfolio_Character::Tick(float DeltaTime)
 		else 
 		{
 		    bUseControllerRotationYaw = true;
-
 		}
 	}
-
 
 	//Zoom in if ZoomIn button is down, zoom back out if it's not
 	{
@@ -94,12 +86,10 @@ void APortfolio_Character::Tick(float DeltaTime)
 		ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
 		//Blend our camera's FOV and our SpringArm's length based on ZoomFactor
 		//FMath::Lerp<float>(Af, Bf, C) -> C의 속력으로 A-B를 한다.
-		
 		OurCameraSpringArm->TargetArmLength = FMath::Lerp<float>(140.0f, A, ZoomFactor);
 		OurCameraSpringArm->SocketOffset.Y = FMath::Lerp<float>(55.0f, B, ZoomFactor);
 		OurCameraSpringArm->SocketOffset.Z = FMath::Lerp<float>(65.0f, C, ZoomFactor);
 	}
-
 
 	//공격에서 AttackCheck == 1이 되면 여기서 공격실행
 	{
@@ -122,7 +112,6 @@ void APortfolio_Character::Tick(float DeltaTime)
 	        }
 		}
 	}
-
 }
 
 void APortfolio_Character::ZoomCheck(float *_A, float *_B, float *_C, float* _S)
@@ -131,7 +120,6 @@ void APortfolio_Character::ZoomCheck(float *_A, float *_B, float *_C, float* _S)
 	B = *_B;
 	C = *_C;
 	S = *_S;
-
 }
 
 // Called to bind functionality to input
@@ -145,7 +133,6 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	{
 		bBindingsAdded = true;
 
-		
 		// 축매핑
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveForward", EKeys::W, 1.f));
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveForward", EKeys::S, -1.f));
@@ -154,12 +141,8 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerMoveRight", EKeys::D, 1.f));
 
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerTurn", EKeys::MouseX, 1.f));
-
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerLookUp", EKeys::MouseY, -1.f));
 
-		//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerLookUp", EKeys::MouseY, -1.f));
-		
-		//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("PlayerAimingCheck", EKeys::RightMouseButton));
 		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAiming"), EKeys::RightMouseButton));
     	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerAttack"), EKeys::LeftMouseButton));
 
@@ -177,7 +160,6 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("PlayerLookUp", this, &APortfolio_Character::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("PlayerLookUpRate", this, &APortfolio_Character::LookUpAtRate);
 
-	//PlayerInputComponent->BindAxis("PlayerAimingCheck", this, &APortfolio_Character::IN_AimingAction_Check);
 	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Pressed , this, &APortfolio_Character::IN_AimingAction);
 	PlayerInputComponent->BindAction("PlayerAiming", EInputEvent::IE_Released, this, &APortfolio_Character::OUT_AimingAction);
 	PlayerInputComponent->BindAction("PlayerAttack", EInputEvent::IE_Pressed, this, &APortfolio_Character::AttackAction);
@@ -187,16 +169,9 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	
 }
 
-
+//좌우이동
 void APortfolio_Character::MoveRight(float Val)
 {
-	/*
-	if (AniState == EAniState::W_Attack)
-	{
-		return;
-	}
-	*/
-
 	if (Val != 0.f)
 	{
 		if (Controller)
@@ -206,6 +181,7 @@ void APortfolio_Character::MoveRight(float Val)
 			// 현재 내 회전을 가져와서 y축에 해당하는 축벡터를 얻어오는 겁니다.
 			AddMovementInput(FRotationMatrix(ControlSpaceRot).GetScaledAxis(EAxis::Y), Val);
 
+			//달리기 이동
 			if (RunCheck == 1 && AimingActionCheck == 0 && AniState != EAniState::Idle)
 			{
 				MoveCom->MaxWalkSpeed = 420.0f;
@@ -214,6 +190,7 @@ void APortfolio_Character::MoveRight(float Val)
 				return;
 			}
 			
+			//웅크리기 이동
 			if (CrouchCheck == 1)
 			{
 				MoveCom->MaxWalkSpeed = 250.0f;
@@ -221,7 +198,7 @@ void APortfolio_Character::MoveRight(float Val)
 				return;
 			}
 
-			
+			//조준이동 및 기본이동
 		    {
 			    if (AimingActionCheck == 0) 
 			    {
@@ -265,7 +242,7 @@ void APortfolio_Character::MoveRight(float Val)
 	}
 }
 
-
+//앞뒤이동
 void APortfolio_Character::MoveForward(float Val)
 {
 	if (Val != 0.f)
@@ -279,7 +256,7 @@ void APortfolio_Character::MoveForward(float Val)
 			const FVector Direction = FRotationMatrix(YawRotation).GetScaledAxis(EAxis::X);
 			AddMovementInput(Direction, Val);
 
-
+			//달리기 이동
 			if (RunCheck == 1 && AimingActionCheck == 0 && AniState != EAniState::Idle)
 			{
 				MoveCom->MaxWalkSpeed = 420.0f;
@@ -288,6 +265,7 @@ void APortfolio_Character::MoveForward(float Val)
 				return;
 			}
 
+			//웅크리기 이동
 			if (CrouchCheck == 1)
 			{
 				MoveCom->MaxWalkSpeed = 250.0f;
@@ -295,7 +273,7 @@ void APortfolio_Character::MoveForward(float Val)
 				return;
 			}
 
-			
+			//조준이동 및 기본이동
 			{
 				if (AimingActionCheck == 0)
 				{
@@ -336,11 +314,7 @@ void APortfolio_Character::MoveForward(float Val)
 			AniState = EAniState::Crouch_Idle;
 		}
 	}
-
-	// 이런 느낌의 함수 즉 static함수를 의미한다.
-	// AEGLOBAL::DebugPrint("AAAAAAA");
 }
-
 
 void APortfolio_Character::TurnAtRate(float Rate)
 {
@@ -354,19 +328,21 @@ void APortfolio_Character::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds() * CustomTimeDilation);
 }
 
+//조준
 void APortfolio_Character::IN_AimingAction()
 {
     AniState = EAniState::W_Aiming;
 
-	float a = 80.0f;
-	float b = 80.0f;
-	float c = 70.0f;
-	float s = 0.15f;
-	ZoomCheck(&a, &b, &c, &s);
+	float a = 80.0f; //타겟암 길이
+	float b = 80.0f; //타겟암 Y축
+	float c = 70.0f; //타겟암 Z축
+	float s = 0.15f; //속력
+	ZoomCheck(&a, &b, &c, &s); //타겟암 설정
 
 	RunCheck = 0;
 	CrouchCheck = 0;
 	CrouchZooming = false;
+
 	AimingActionCheck = 1;
 	//ZoomingIn = 1;
 	bZoomingIn = true;
@@ -387,10 +363,9 @@ void APortfolio_Character::OUT_AimingAction()
 	bZoomingIn = false;
 }
 
+//공격
 void APortfolio_Character::AttackAction()
 {
-	// 무브먼트 컴포넌트를 통해서 한다.
-	// GetMovementComponent()
 	/*
 	if ( AimingActionCheck == 1 && AniState == EAniState::W_Aiming )
 	{
@@ -412,6 +387,7 @@ void APortfolio_Character::AttackAction()
 	return;
 }
 
+//이펙트(공격)
 void APortfolio_Character::AnimNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
 	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
@@ -450,22 +426,21 @@ void APortfolio_Character::AnimNotifyBegin(FName NotifyName, const FBranchingPoi
 	}
 }
 
+//달리기
 void APortfolio_Character::Run() 
 {
-	float a = 145.0f;
-	float b = 45.0f;
-	float c = 60.0f;
-	float s = 0.35f;
+	float a = 145.0f; //타겟암 길이
+	float b = 45.0f; //타겟암 Y축
+	float c = 60.0f; //타켓암 Z축
+	float s = 0.35f; //속력
 
 	if (RunCheck == 0)
 	{
 		CrouchCheck = 0;
 		CrouchZooming = false;
 
+		ZoomCheck(&a, &b, &c, &s); //타겟암 설정
 		RunCheck = 1;
-
-		ZoomCheck(&a, &b, &c, &s);
-
 		return;
 	}
 	else
@@ -476,19 +451,21 @@ void APortfolio_Character::Run()
 	}
 }
 
+//웅크리기
 void APortfolio_Character::Crouch() 
 {
-	float a = 150.0f;
-	float b = 55.0f;
-	float c = 50.0f;
-	float s = 0.35f;
+	float a = 150.0f; //타겟암 길이
+	float b = 55.0f; //타겟암 Y축
+	float c = 50.0f; //타켓암 Z축
+	float s = 0.35f; //속력
+
 	if (CrouchCheck == 0 && AimingActionCheck == 0)
 	{
 		RunCheck = 0;
 		AimingActionCheck = 0;
 		bZoomingIn = false;
 
-		ZoomCheck(&a, &b, &c, &s);
+		ZoomCheck(&a, &b, &c, &s); //타겟암 설정
 		CrouchZooming = true;
 	    CrouchCheck = 1;
 		AniState = EAniState::CrouchOn;
