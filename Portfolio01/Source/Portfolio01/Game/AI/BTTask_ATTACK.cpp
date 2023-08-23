@@ -25,6 +25,12 @@ void UBTTask_ATTACK::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 {
 	Super::TickTask(OwnerComp, NodeMemory, DelataSeconds);
 
+	if (true == IsDeathCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::DEATH);
+		return;
+	}
+
 	UAnimMontage* Montage = GetGlobalCharacter(OwnerComp)->GetAnimMontage(UBTTask_AIBase::GetAiState(OwnerComp));
 	float Time = Montage->CalculateSequenceLength();
 

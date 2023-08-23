@@ -2,6 +2,9 @@
 
 
 #include "Global/Portfolio_Tile.h"
+#include <Global/Portfolio_GameInstance.h>
+#include <Global/Data/PlayerData.h>
+#include <Global/Portfolio_GlobalCharacter.h>
 
 // Sets default values
 APortfolio_Tile::APortfolio_Tile()
@@ -19,6 +22,14 @@ APortfolio_Tile::APortfolio_Tile()
 // Called when the game starts or when spawned
 void APortfolio_Tile::BeginPlay()
 {
+	//PlayerData에 Att값을 가져와 사용한다
+	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+	if (nullptr != Inst)
+	{
+		CurPlayerData = Inst->GetPlayerData(AttDataName);
+	}
+
+
 	Super::BeginPlay();
 
 	OnDestroyed.AddDynamic(this, &APortfolio_Tile::DestroyProjectile);
@@ -45,11 +56,28 @@ void APortfolio_Tile::Tick(float DeltaTime)
 
 	DeathTime -= DeltaTime;
 
-	if (DeathTime < 0.0f)
-	{
-		Destroy();
-		return;
-	}
+		if (DeathTime < 0.0f)
+		{
+			Destroy();
+			CurPlayerData->ATT = 1000;
+			return;
+
+		}
+
+	//if (CurPlayerData != nullptr)
+	//{
+		if (DeltaTime >= 0.1f)
+		{
+			int Att = 1000;
+			int RangeAtt = 20;
+			CurPlayerData->ATT -= RangeAtt;
+			//Att에 값을 저장하여, 적중시 HP계산할때 사용한다
+			Att = CurPlayerData->ATT;
+			
+		    UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+			Inst->GetGameData(Att);
+		}
+	//}
 
 	AddActorWorldOffset(GetActorForwardVector() * DeltaTime * Speed);
 }

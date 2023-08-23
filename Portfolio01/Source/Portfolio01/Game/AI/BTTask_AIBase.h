@@ -47,6 +47,8 @@ public:
 
 	void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DelataSeconds) override;
 	
+	bool IsDeathCheck(UBehaviorTreeComponent& OwnerComp);
+
 	//void SetPos(FVector& _Pos, UBehaviorTreeComponent& OwnerComp, int Count);
 	//FVector GetPos();
 

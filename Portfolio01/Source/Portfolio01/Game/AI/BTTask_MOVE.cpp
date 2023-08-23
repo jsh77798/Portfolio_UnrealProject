@@ -46,10 +46,9 @@ void UBTTask_MOVE::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		return;
 	}
 
-	bool DeathCheck = false;
 	bool Target = GetBlackboardComponent(OwnerComp)->GetValueAsBool(TEXT("Death"));
 
-	if (DeathCheck == true)
+	if (true == IsDeathCheck(OwnerComp))
 	{
 		SetStateChange(OwnerComp, AIState::DEATH);
 		return;

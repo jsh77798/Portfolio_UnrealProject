@@ -23,6 +23,12 @@ void UBTTask_IDLE::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 {
 	Super::TickTask(OwnerComp, NodeMemory, DelataSeconds);
 
+	if (true == IsDeathCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::DEATH);
+		return;
+	}
+
 	if (2.0f <= GetStateTime(OwnerComp))
 	{
 		// 지역변수로 랜덤을 이용하는것.

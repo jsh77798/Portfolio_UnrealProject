@@ -3,6 +3,7 @@
 
 #include "Portfolio_Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APortfolio_Character::APortfolio_Character()
@@ -38,20 +39,25 @@ APortfolio_Character::APortfolio_Character()
 // Called when the game starts or when spawned
 void APortfolio_Character::BeginPlay()
 {
+	SetAllAnimation(MapAnimation);
+
 	Super::BeginPlay();
 
-	//GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddUniqueDynamic(this, &APortfolio_Character::AnimNotifyBegin);
-	//GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APortfolio_Character::AnimNotifyBegin);
+	GetGlobalAnimInstance()->OnMontageBlendingOut.AddDynamic(this, &APortfolio_Character::MontageEnd);
+	GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APortfolio_Character::AnimNotifyBegin);
+	SetAniState(EAniState::Idle);
 }
 
 // Called every frame
 void APortfolio_Character::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	//Super::Tick(DeltaTime);
+
+	AniStateValue = GetAniState<EAniState>();
 
 	//Run 상태확인 및 설정
 	{
-	    if (AniState == EAniState::Idle)
+	    if (AniStateValue == EAniState::Idle)
 	    {
 	    	RunCheck = 0;
 			RunZooming = false;
@@ -60,7 +66,7 @@ void APortfolio_Character::Tick(float DeltaTime)
 
 	//use controller rotation yaw 설정
 	{
-		if (AniState == EAniState::Idle || AniState == EAniState::ForwardMove || RunCheck == 1)
+		if (AniStateValue == EAniState::Idle || AniStateValue == EAniState::ForwardMove || RunCheck == 1)
 		{
 			bUseControllerRotationYaw = false;
 
@@ -95,19 +101,19 @@ void APortfolio_Character::Tick(float DeltaTime)
 	{
 		if (AttackCheck == 1) {
 
-	        if (AimingActionCheck == 1 && AniState == EAniState::W_Aiming)
+	        if (AimingActionCheck == 1 && AniStateValue == EAniState::W_Aiming)
 	        {
-		       AniState = EAniState::W_Attack;
-			   AttackCheck= 0;
+				SetAniState(EAniState::W_Attack);
+			    AttackCheck= 0;
 	        }
  
 	        if (AimingActionCheck == 1
-		        || AniState == EAniState::Aiming_ForwardMove
-		        || AniState == EAniState::Aiming_BackwardMove
-		        || AniState == EAniState::Aiming_RightMove
-		        || AniState == EAniState::Aiming_LeftMove)
+		        || AniStateValue == EAniState::Aiming_ForwardMove
+		        || AniStateValue == EAniState::Aiming_BackwardMove
+		        || AniStateValue == EAniState::Aiming_RightMove
+		        || AniStateValue == EAniState::Aiming_LeftMove)
 	        {
-		        AniState = EAniState::W_Attack;
+				SetAniState(EAniState::W_Attack);
 				AttackCheck= 0;
 	        }
 		}
@@ -120,6 +126,49 @@ void APortfolio_Character::ZoomCheck(float *_A, float *_B, float *_C, float* _S)
 	B = *_B;
 	C = *_C;
 	S = *_S;
+}
+
+void APortfolio_Character::MontageEnd(UAnimMontage* Anim, bool _Inter)
+{
+	TSubclassOf<UAnimInstance> Inst = APortfolio_Character::StaticClass();
+
+	// Anim 종료된 몽타주
+	if (MapAnimation[EAniState::W_Attack] == Anim)
+	{
+		if (AniStateValue == EAniState::Idle)
+		{
+			return;
+		}
+		else
+		{
+			SetAniState(EAniState::W_Aiming);
+		}
+	}
+
+	if (MapAnimation[EAniState::CrouchOn] == Anim)
+	{
+		if (AniStateValue == EAniState::Crouch_Idle)
+		{
+			return;
+		}
+		else
+		{
+			SetAniState(EAniState::Crouch_Idle);
+		}
+	}
+
+	if (MapAnimation[EAniState::CrouchOff] == Anim)
+	{
+		if (AniStateValue == EAniState::Idle)
+		{
+			return;
+		}
+		else
+		{
+
+			SetAniState(EAniState::Idle);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -182,11 +231,11 @@ void APortfolio_Character::MoveRight(float Val)
 			AddMovementInput(FRotationMatrix(ControlSpaceRot).GetScaledAxis(EAxis::Y), Val);
 
 			//달리기 이동
-			if (RunCheck == 1 && AimingActionCheck == 0 && AniState != EAniState::Idle)
+			if (RunCheck == 1 && AimingActionCheck == 0 && AniStateValue != EAniState::Idle)
 			{
 				MoveCom->MaxWalkSpeed = 420.0f;
 				RunZooming = true;
-				AniState = Val > 0.f ? EAniState::RightRun : EAniState::LeftRun;
+				SetAniState(Val > 0.f ? EAniState::RightRun : EAniState::LeftRun);
 				return;
 			}
 			
@@ -194,7 +243,7 @@ void APortfolio_Character::MoveRight(float Val)
 			if (CrouchCheck == 1)
 			{
 				MoveCom->MaxWalkSpeed = 250.0f;
-				AniState = Val > 0.f ? EAniState::Crouch_RightMove : EAniState::Crouch_LeftMove;
+				SetAniState(Val > 0.f ? EAniState::Crouch_RightMove : EAniState::Crouch_LeftMove);
 				return;
 			}
 
@@ -203,13 +252,13 @@ void APortfolio_Character::MoveRight(float Val)
 			    if (AimingActionCheck == 0) 
 			    {
 			  	    MoveCom->MaxWalkSpeed = 350.0f;
-				    AniState = Val > 0.f ? EAniState::RightMove : EAniState::LeftMove;
+					SetAniState(Val > 0.f ? EAniState::RightMove : EAniState::LeftMove);
 				    return;
 			    }
 			    else 
 			    {
 			    	MoveCom->MaxWalkSpeed = 300.0f;
-			        AniState = Val > 0.f ? EAniState::Aiming_RightMove : EAniState::Aiming_LeftMove;
+					SetAniState(Val > 0.f ? EAniState::Aiming_RightMove : EAniState::Aiming_LeftMove);
 				    return;
 		  	    }  
 		    }
@@ -219,25 +268,25 @@ void APortfolio_Character::MoveRight(float Val)
 	}
 	else
 	{
-		if ( AniState == EAniState::RightMove || AniState == EAniState::LeftMove )
+		if (AniStateValue == EAniState::RightMove || AniStateValue == EAniState::LeftMove )
 		{
-			AniState = EAniState::Idle;
+			SetAniState(EAniState::Idle);
 		}
-		if ( AniState == EAniState::Aiming_RightMove || AniState == EAniState::Aiming_LeftMove )
+		if (AniStateValue == EAniState::Aiming_RightMove || AniStateValue == EAniState::Aiming_LeftMove )
 		{
-			AniState = EAniState::W_Aiming;
+			SetAniState(EAniState::W_Aiming);
 		}
 
-		if (AniState == EAniState::RightRun || AniState == EAniState::LeftRun)
+		if (AniStateValue == EAniState::RightRun || AniStateValue == EAniState::LeftRun)
 		{
-			AniState = EAniState::Idle;
+			SetAniState(EAniState::Idle);
 			RunZooming = false;
 			RunCheck = 0;
 		}
 
-		if (AniState == EAniState::Crouch_RightMove || AniState == EAniState::Crouch_LeftMove)
+		if (AniStateValue == EAniState::Crouch_RightMove || AniStateValue == EAniState::Crouch_LeftMove)
 		{
-			AniState = EAniState::Crouch_Idle;
+			SetAniState(EAniState::Crouch_Idle);
 		}
 	}
 }
@@ -257,11 +306,11 @@ void APortfolio_Character::MoveForward(float Val)
 			AddMovementInput(Direction, Val);
 
 			//달리기 이동
-			if (RunCheck == 1 && AimingActionCheck == 0 && AniState != EAniState::Idle)
+			if (RunCheck == 1 && AimingActionCheck == 0 && AniStateValue != EAniState::Idle)
 			{
 				MoveCom->MaxWalkSpeed = 420.0f;
 				RunZooming = true;
-				AniState = Val > 0.f ? EAniState::ForwardRun : EAniState::BackwardRun;
+				SetAniState(Val > 0.f ? EAniState::ForwardRun : EAniState::BackwardRun);
 				return;
 			}
 
@@ -269,7 +318,7 @@ void APortfolio_Character::MoveForward(float Val)
 			if (CrouchCheck == 1)
 			{
 				MoveCom->MaxWalkSpeed = 250.0f;
-				AniState = Val > 0.f ? EAniState::Crouch_ForwardMove : EAniState::Crouch_BackwardMove;
+				SetAniState(Val > 0.f ? EAniState::Crouch_ForwardMove : EAniState::Crouch_BackwardMove);
 				return;
 			}
 
@@ -278,13 +327,13 @@ void APortfolio_Character::MoveForward(float Val)
 				if (AimingActionCheck == 0)
 				{
 					MoveCom->MaxWalkSpeed = 350.0f;
-					AniState = Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove;
+					SetAniState(Val > 0.f ? EAniState::ForwardMove : EAniState::BackwardMove);
 					return;
 				}
 				else
 				{
 					MoveCom->MaxWalkSpeed = 300.0f;
-					AniState = Val > 0.f ? EAniState::Aiming_ForwardMove : EAniState::Aiming_BackwardMove;
+					SetAniState(Val > 0.f ? EAniState::Aiming_ForwardMove : EAniState::Aiming_BackwardMove);
 					return;
 				}
 			}
@@ -293,25 +342,25 @@ void APortfolio_Character::MoveForward(float Val)
 	}
 	else
 	{
-		if ( AniState == EAniState::ForwardMove || AniState == EAniState::BackwardMove )
+		if (AniStateValue == EAniState::ForwardMove || AniStateValue == EAniState::BackwardMove )
 		{
-			AniState = EAniState::Idle;
+			SetAniState(EAniState::Idle);
 		}
-		if (AniState == EAniState::Aiming_ForwardMove || AniState == EAniState::Aiming_BackwardMove)
+		if (AniStateValue == EAniState::Aiming_ForwardMove || AniStateValue == EAniState::Aiming_BackwardMove)
 		{
-			AniState = EAniState::W_Aiming;
+			SetAniState(EAniState::W_Aiming);
 		}
 
-		if (AniState == EAniState::ForwardRun || AniState == EAniState::BackwardRun)
+		if (AniStateValue == EAniState::ForwardRun || AniStateValue == EAniState::BackwardRun)
 		{
-			AniState = EAniState::Idle;
+			SetAniState(EAniState::Idle);
 			RunZooming = false;
 			RunCheck = 0;
 		}
 
-		if (AniState == EAniState::Crouch_ForwardMove || AniState == EAniState::Crouch_BackwardMove)
+		if (AniStateValue == EAniState::Crouch_ForwardMove || AniStateValue == EAniState::Crouch_BackwardMove)
 		{
-			AniState = EAniState::Crouch_Idle;
+			SetAniState(EAniState::Crouch_Idle);
 		}
 	}
 }
@@ -331,7 +380,7 @@ void APortfolio_Character::LookUpAtRate(float Rate)
 //조준
 void APortfolio_Character::IN_AimingAction()
 {
-    AniState = EAniState::W_Aiming;
+	SetAniState(EAniState::W_Aiming);
 
 	float a = 80.0f; //타겟암 길이
 	float b = 80.0f; //타겟암 Y축
@@ -352,11 +401,11 @@ void APortfolio_Character::OUT_AimingAction()
 {
 	if (AimingActionCheck == 0)
 	{
-		AniState = EAniState::Idle;
+		SetAniState(EAniState::Idle);
 	}
 	else
 	{
-		AniState = EAniState::Idle;
+		SetAniState(EAniState::Idle);
 		AimingActionCheck = 0;
 	}
 
@@ -393,6 +442,7 @@ void APortfolio_Character::AnimNotifyBegin(FName NotifyName, const FBranchingPoi
 	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
 
 	TSubclassOf<UObject> Effect = Inst->GetSubClass(TEXT("ShotEffect"));
+	TSubclassOf<UObject> ShellEffect = Inst->GetSubClass(TEXT("ShellEffect"));
 	TSubclassOf<UObject> RangeAttack = Inst->GetSubClass(TEXT("PlayerRangeAttack"));
 
 	/*
@@ -421,9 +471,20 @@ void APortfolio_Character::AnimNotifyBegin(FName NotifyName, const FBranchingPoi
 			ProjectTile->SetActorLocation(Pos);
 			ProjectTile->SetActorRotation(GetActorRotation());
 			ProjectTile->GetSphereComponent()->SetCollisionProfileName(TEXT("PlayerAttack"), true);
-			
 		}
 	}
+	/*
+	if (nullptr != ShellEffect)
+	{
+		FTransform Trans;
+		FVector Pos;
+		TArray<UActorComponent*> MeshEffects = GetComponentsByTag(USceneComponent::StaticClass(), TEXT("ShellEffect"));
+		TArray<UActorComponent*> StaticMeshs = GetComponentsByTag(USceneComponent::StaticClass(), TEXT("WeaponMesh"));
+
+		USceneComponent* EffectCom = Cast<USceneComponent>(MeshEffects[1]);
+		Pos = EffectCom->GetComponentToWorld().GetLocation();
+	}
+	*/
 }
 
 //달리기
@@ -468,12 +529,12 @@ void APortfolio_Character::Crouch()
 		ZoomCheck(&a, &b, &c, &s); //타겟암 설정
 		CrouchZooming = true;
 	    CrouchCheck = 1;
-		AniState = EAniState::CrouchOn;
+		SetAniState(EAniState::CrouchOn);
 		return;
 	}
 	else
 	{
-		AniState = EAniState::CrouchOff;
+		SetAniState(EAniState::CrouchOff);
 		CrouchZooming = false;
 		CrouchCheck = 0;
 		return;

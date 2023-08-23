@@ -12,13 +12,20 @@ class PORTFOLIO01_API APortfolio_Tile : public AActor
 {
 	GENERATED_BODY()
 
+	struct FPlayerData* CurPlayerData;
+
+	UPROPERTY(Category = "ATT", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    FName AttDataName = "NONE";
+
+	//int Att = 0;
+
 public:	
 	// Sets default values for this actor's properties
 	
 	APortfolio_Tile();
 
 	UPROPERTY(Category = "Effect", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float Speed = 2000.0f;
+		float Speed = 3000.0f;
 
 	UPROPERTY(Category = "Effect", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float DeathTime = 5.0f;
@@ -31,6 +38,10 @@ public:
 	{
 		return SphereComponent;
 	}
+
+	//class APortfolio_GlobalCharacter* ATT = nullptr;
+	//int ShutGunAtt = 1000;
+
 
 protected:
 	// Called when the game starts or when spawned

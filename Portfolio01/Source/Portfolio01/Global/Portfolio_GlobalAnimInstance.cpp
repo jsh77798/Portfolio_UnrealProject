@@ -4,6 +4,7 @@
 #include "Global/Portfolio_GlobalAnimInstance.h"
 #include "Global/Portfolio_GlobalCharacter.h"
 #include <Global/Data/MonsterData.h>
+#include "Portfolio_Global.h"
 
 void UPortfolio_GlobalAnimInstance::NativeBeginPlay()
 {

@@ -4,6 +4,7 @@
 #include "Player_AnimInstance.h"
 #include "Portfolio_Character.h"
 
+/*
 void UPlayer_AnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
@@ -123,3 +124,4 @@ void UPlayer_AnimInstance::MontageEnd(UAnimMontage* Anim, bool _Inter)
 		}
 	}
 }
+*/

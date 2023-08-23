@@ -16,6 +16,7 @@ class PORTFOLIO01_API UPlayer_AnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
+	/*
 	UPROPERTY(Category = "GameModeValue", EditAnywhere, BlueprintReadWrite)
 		EAniState AniState = EAniState::Idle;
 
@@ -32,4 +33,5 @@ public:
 protected:
 	void NativeBeginPlay() override;
 	void NativeUpdateAnimation(float _DeltaTime) override;
+	*/
 };

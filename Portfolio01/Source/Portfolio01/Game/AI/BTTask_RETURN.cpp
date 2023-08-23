@@ -35,6 +35,11 @@ EBTNodeResult::Type UBTTask_RETURN::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 void UBTTask_RETURN::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DelataSeconds)
 {
+	if (true == IsDeathCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::DEATH);
+		return;
+	}
 
 	PrePos = GetBlackboardComponent(OwnerComp)->GetValueAsVector(TEXT("PrePos"));
 	PrePos.Z = 0.0f;

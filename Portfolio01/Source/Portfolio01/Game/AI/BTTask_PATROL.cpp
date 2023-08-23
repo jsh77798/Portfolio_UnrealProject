@@ -63,6 +63,12 @@ void UBTTask_PATROL::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 {
 	Super::TickTask(OwnerComp, NodeMemory, DelataSeconds);
 
+	if (true == IsDeathCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::DEATH);
+		return;
+	}
+
 	UObject* PPObject = GetBlackboardComponent(OwnerComp)->GetValueAsObject(TEXT("PatrolPositions"));
 
 	if (nullptr == PPObject)

@@ -179,6 +179,17 @@ class AActor* UBTTask_AIBase::GetTargetSearch(UBehaviorTreeComponent& OwnerComp)
 	return ResultActor;
 }
 
+bool UBTTask_AIBase::IsDeathCheck(UBehaviorTreeComponent& OwnerComp)
+{
+	if (0 >= GetGlobalCharacter(OwnerComp)->GetHP())
+	{
+		SetStateChange(OwnerComp, AIState::DEATH);
+		return true;
+	}
+
+	return false;
+}
+
 /*
 void UBTTask_AIBase::SetPos(FVector& _Pos, UBehaviorTreeComponent& OwnerComp, int Count)
 {

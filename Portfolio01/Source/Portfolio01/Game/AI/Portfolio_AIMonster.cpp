@@ -32,3 +32,15 @@ void APortfolio_AIMonster::BeginPlay()
 
 }
 
+void APortfolio_AIMonster::Destroyed()
+{
+	Super::Destroyed();
+
+	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+
+	if (nullptr == Inst)
+	{
+		return;
+	}
+
+}

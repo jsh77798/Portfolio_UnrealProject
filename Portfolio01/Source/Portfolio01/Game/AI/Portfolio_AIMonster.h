@@ -27,6 +27,7 @@ public:
 	FVector MPrePos;
 	int A = 0;
 
+	void Destroyed() override;
 
 private:
 

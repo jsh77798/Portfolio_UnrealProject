@@ -5,6 +5,7 @@
 #include <Global/Data/GameMeshData.h>
 #include <Global/Data/SubClassData.h>
 #include <Global/Data/MonsterData.h>
+#include <Global/Data/PlayerData.h>
 #include "Portfolio_Global.h"
 
 
@@ -24,7 +25,7 @@ UPortfolio_GameInstance::UPortfolio_GameInstance()
 			for (size_t i = 0; i < ArrayName.Num(); i++)
 			{
 
-				//FGameMeshData* FindTable = MeshDatas->FindRow<FGameMeshData>(ArrayName[i], ArrayName[i].ToString());
+				FGameMeshData* FindTable = MeshDatas->FindRow<FGameMeshData>(ArrayName[i], ArrayName[i].ToString());
 
 				int a = 0;
 			}
@@ -50,6 +51,19 @@ UPortfolio_GameInstance::UPortfolio_GameInstance()
 		if (DataTable.Succeeded())
 		{
 			MonsterDatas = DataTable.Object;
+		}
+
+	}
+
+
+	{
+
+		FString DataPath = TEXT("/Script/Engine.DataTable'/Game/BluePrint/Character_Player/DT_PlayerData.DT_PlayerData'");
+		ConstructorHelpers::FObjectFinder<UDataTable> DataTable(*DataPath);
+
+		if (DataTable.Succeeded())
+		{
+			PlayerDatas = DataTable.Object;
 		}
 
 	}
@@ -113,4 +127,32 @@ FMonsterData* UPortfolio_GameInstance::GetMonsterData(FName _Name)
 	}
 
 	return FindTable;
+}
+
+FPlayerData* UPortfolio_GameInstance::GetPlayerData(FName _Name)
+{
+	if (nullptr == PlayerDatas)
+	{
+		return nullptr;
+	}
+
+	FPlayerData* FindTable = PlayerDatas->FindRow<FPlayerData>(_Name, _Name.ToString());
+
+	if (nullptr == FindTable)
+	{
+		return nullptr;
+	}
+
+	return FindTable;
+}
+
+void UPortfolio_GameInstance::GetGameData(int _Data) 
+{
+	GameAtt = _Data;
+}
+
+int UPortfolio_GameInstance::SetGameData()
+{
+	return GameAtt;
+	GameAtt = 0;
 }

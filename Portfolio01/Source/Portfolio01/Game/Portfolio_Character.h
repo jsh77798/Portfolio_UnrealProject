@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Global/Portfolio_GlobalCharacter.h"
 #include <Global/Portfolio_GameInstance.h>
 #include <Global/Portfolio_Tile.h>
-#include "Player_AnimInstance.h"
 #include "Portfolio_Enums.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Portfolio_Character.generated.h"
 
 UCLASS()
-class PORTFOLIO01_API APortfolio_Character : public ACharacter
+class PORTFOLIO01_API APortfolio_Character : public APortfolio_GlobalCharacter
 {
 	GENERATED_BODY()
 
@@ -30,16 +29,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	
 public:	
-
-	class UPlayer_AnimInstance* GetGlobalAnimInstance()
-	{
-		return GlobalAnimInstance;
-	}
 
 	void MoveRight(float Val);
 	void MoveForward(float Val);
@@ -84,25 +78,21 @@ public:
 	//UCameraComponent* OurCamera;
 
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
-		float BaseTurnRate;
+	EAniState AniStateValue;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
-		float BaseLookUpRate;
+	UPROPERTY(Category = "Components", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TMap<EAniState, class UAnimMontage*> MapAnimation;
 
-	UPROPERTY(Category = "GameModeValue", EditAnywhere, BlueprintReadWrite)
-		EAniState AniState = EAniState::Idle;
-
-	//몽타주 애니메이션 블루프린트내 Map가져오기
-	UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite)
-		TMap<EAniState, class UAnimMontage*> AllAnimations;
+	UFUNCTION()
+		void MontageEnd(UAnimMontage* Anim, bool _Inter);
 
 	UFUNCTION()
 		void AnimNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
 
-	float Speed = 1000.0f;
+	float Speed = 1500.0f;
 
 private:
-	class UPlayer_AnimInstance* GlobalAnimInstance = nullptr;
+	//virtual void Tick(float DeltaTime) override;
+	void Tick(float _Delta) override;
 };
 

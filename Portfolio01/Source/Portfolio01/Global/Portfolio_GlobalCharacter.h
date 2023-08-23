@@ -83,6 +83,11 @@ public:
 		}
 	}
 
+	UFUNCTION()
+		void PushComponent(UActorComponent* _Component)
+	{
+		MgrComponent.Add(_Component);
+	}
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = "true"))
@@ -128,15 +133,15 @@ protected:
 		TArray<UActorComponent*> MgrComponent;
 
 
-public:	
+private:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 
-	UPROPERTY(Category = "GameModeValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		int AniState = 0;
 
-	UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		TMap<int, class UAnimMontage*> AllAnimations;
 
 	//UPROPERTY(Category = "AnimationValue", EditAnywhere, BlueprintReadWrite)
@@ -145,5 +150,5 @@ public:
 	class UPortfolio_GlobalAnimInstance* Portfolio_GlobalAnimInstance = nullptr;
 
 	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		int HP = 1;
+		int HP = 1000;
 };

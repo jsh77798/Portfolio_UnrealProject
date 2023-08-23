@@ -2,6 +2,8 @@
 
 
 #include "Global/Portfolio_GlobalCharacter.h"
+#include <Global/Portfolio_GameInstance.h>
+#include <Global/Data/PlayerData.h>
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -28,14 +30,12 @@ void APortfolio_GlobalCharacter::BeginPlay()
 void APortfolio_GlobalCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
 void APortfolio_GlobalCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponent,
@@ -50,12 +50,18 @@ void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponen
 	// 아이템일까?
 	// 총알일까?
 	// Tag
-
+	
 	if (true == OtherComp->ComponentHasTag(TEXT("Damage")))
 	{
 		// 상대가 대미지를 가졌다면 어떻게 알아올것이냐?
-
-		HP -= 1;
-		// Damage(OtherActor);
+		int ATT = 0;
+		UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+		ATT = Inst->SetGameData();
+		if (100 >= ATT)
+		{
+			ATT = 100;
+		}
+		HP -= ATT;
+		//Damage(OtherActor);
 	}
 }
