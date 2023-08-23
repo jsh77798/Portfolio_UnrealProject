@@ -190,6 +190,17 @@ bool UBTTask_AIBase::IsDeathCheck(UBehaviorTreeComponent& OwnerComp)
 	return false;
 }
 
+bool UBTTask_AIBase::IsAttackCheck(UBehaviorTreeComponent& OwnerComp)
+{
+	if (1000 > GetGlobalCharacter(OwnerComp)->GetHP())
+	{
+		SetStateChange(OwnerComp, AIState::DEATH);
+		return true;
+	}
+
+	return false;
+}
+
 /*
 void UBTTask_AIBase::SetPos(FVector& _Pos, UBehaviorTreeComponent& OwnerComp, int Count)
 {

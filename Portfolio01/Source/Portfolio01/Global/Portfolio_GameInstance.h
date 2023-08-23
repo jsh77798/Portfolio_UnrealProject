@@ -28,9 +28,10 @@ public:
 
 	struct FPlayerData* GetPlayerData(FName _Name);
 
-	void GetGameData(int _Data);
+	void GetGameData(int _Data, AActor* Owner);
 	int SetGameData();
-	int GameAtt;
+	int GameAtt = 0;
+	AActor* _Owner = nullptr;
 
 private:
 	UPROPERTY()

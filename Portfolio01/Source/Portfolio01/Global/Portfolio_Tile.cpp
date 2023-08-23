@@ -28,6 +28,7 @@ void APortfolio_Tile::BeginPlay()
 	{
 		CurPlayerData = Inst->GetPlayerData(AttDataName);
 	}
+	PlayerAtt = CurPlayerData->ATT;
 
 
 	Super::BeginPlay();
@@ -59,26 +60,36 @@ void APortfolio_Tile::Tick(float DeltaTime)
 		if (DeathTime < 0.0f)
 		{
 			Destroy();
-			CurPlayerData->ATT = 1000;
 			return;
-
 		}
 
-	//if (CurPlayerData != nullptr)
-	//{
-		if (DeltaTime >= 0.1f)
-		{
-			int Att = 1000;
-			int RangeAtt = 20;
-			CurPlayerData->ATT -= RangeAtt;
-			//Att에 값을 저장하여, 적중시 HP계산할때 사용한다
-			Att = CurPlayerData->ATT;
-			
-		    UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
-			Inst->GetGameData(Att);
-		}
-	//}
+
+		//if (DeltaTime >= 0.01f)
+		//{
+
+     	PlayerAtt -= RangeAtt * DeltaTime * 0.1;
+		//PlayerAtt에 값을 저장하여, 적중시 HP계산할때 사용한다
+
+		GetData(PlayerAtt);
+
+		    //UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+			//Inst->GetGameData(PlayerAtt);
+		//}
+	
 
 	AddActorWorldOffset(GetActorForwardVector() * DeltaTime * Speed);
 }
 
+void APortfolio_Tile::GetData(int _Data) 
+{
+	Data = _Data;
+
+	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+	Inst->GetGameData(Data, this);
+	
+}
+
+int APortfolio_Tile::SetData() 
+{
+	return Data;
+}

@@ -49,6 +49,8 @@ public:
 	
 	bool IsDeathCheck(UBehaviorTreeComponent& OwnerComp);
 
+	bool IsAttackCheck(UBehaviorTreeComponent& OwnerComp);
+
 	//void SetPos(FVector& _Pos, UBehaviorTreeComponent& OwnerComp, int Count);
 	//FVector GetPos();
 

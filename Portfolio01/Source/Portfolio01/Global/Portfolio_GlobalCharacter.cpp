@@ -4,6 +4,7 @@
 #include "Global/Portfolio_GlobalCharacter.h"
 #include <Global/Portfolio_GameInstance.h>
 #include <Global/Data/PlayerData.h>
+#include <Global/Portfolio_Tile.h>
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -56,6 +57,8 @@ void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponen
 		// 상대가 대미지를 가졌다면 어떻게 알아올것이냐?
 		int ATT = 0;
 		UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+		//APortfolio_Tile* Tile = NewObject<APortfolio_Tile>();
+
 		ATT = Inst->SetGameData();
 		if (100 >= ATT)
 		{

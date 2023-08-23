@@ -146,9 +146,18 @@ FPlayerData* UPortfolio_GameInstance::GetPlayerData(FName _Name)
 	return FindTable;
 }
 
-void UPortfolio_GameInstance::GetGameData(int _Data) 
+void UPortfolio_GameInstance::GetGameData(int _Data, AActor* Owner)
 {
-	GameAtt = _Data;
+	if (_Owner == Owner)
+	{
+	   GameAtt = 0;
+	   GameAtt = _Data;
+	}
+	else 
+	{
+		_Owner = Owner;
+		GameAtt = 0;
+	}
 }
 
 int UPortfolio_GameInstance::SetGameData()

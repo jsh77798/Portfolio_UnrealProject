@@ -17,7 +17,11 @@ class PORTFOLIO01_API APortfolio_Tile : public AActor
 	UPROPERTY(Category = "ATT", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     FName AttDataName = "NONE";
 
-	//int Att = 0;
+	int PlayerAtt = 0;
+	int RangeAtt = 100;
+
+	int Data = 0;
+	
 
 public:	
 	// Sets default values for this actor's properties
@@ -38,6 +42,12 @@ public:
 	{
 		return SphereComponent;
 	}
+
+	UFUNCTION()
+	void GetData(int _Data);
+
+	UFUNCTION()
+	int SetData();
 
 	//class APortfolio_GlobalCharacter* ATT = nullptr;
 	//int ShutGunAtt = 1000;
