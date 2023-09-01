@@ -16,6 +16,12 @@ public:
 	// Sets default values for this character's properties
 	APortfolio_GlobalCharacter();
 
+	UPROPERTY(Category = "RangeATT", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FName RangeAttDataName = "NONE";
+
+	//struct APortfolio_Tile* CurData;
+	struct FTileData* CurData;
+
 	void SetHP(int _HP)
 	{
 		HP -= _HP;
@@ -35,6 +41,7 @@ public:
 	{
 		return AniState;
 	}
+
 
 	template<typename EnumType>
 	EnumType GetAniState()
@@ -125,9 +132,11 @@ protected:
 			class UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
-
-
-	virtual void Damage(AActor* _Actor) {}
+    
+	virtual void Damage(int _Att)
+	{
+		Att = _Att;
+	}
 
 	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		TArray<UActorComponent*> MgrComponent;
@@ -151,4 +160,7 @@ private:
 
 	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		int HP = 1000;
+
+	UPROPERTY(Category = "GlobalChracterValue", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int Att = 0;
 };

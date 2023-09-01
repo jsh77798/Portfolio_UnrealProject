@@ -16,23 +16,27 @@ class PORTFOLIO01_API APortfolio_AIMonster : public AAICharacter
 {
 	GENERATED_BODY()
 
+public:
+	APortfolio_AIMonster();
+
 	const struct FMonsterData* CurMonsterData;
 
 	void BeginPlay() override;
 
-public:
+	void Destroyed() override;
+	
 	//void MonsterPrePos(/*FVector _PrePos*/);
 	//FVector GetPrePos();
 	FVector _PrePos;
 	FVector MPrePos;
 	int A = 0;
 
-	void Destroyed() override;
-
 private:
 
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FName DataName = "NONE";
 
+	UPROPERTY(Category = "Monster", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UPortfolio_MiniMap_Component* MiniMap;
 	//const FMonsterData* CurMonsterData;
 };

@@ -29,7 +29,7 @@ APortfolio_Character::APortfolio_Character()
 	OurCameraSpringArm->bEnableCameraLag = true;
 	OurCameraSpringArm->CameraLagSpeed = 10.0f;
 	//Take control of the default Player
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	//캐릭터 이동 회전 (#include "GameFramework/CharacterMovementComponent.h" 헤더 필요)
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -42,6 +42,16 @@ void APortfolio_Character::BeginPlay()
 	SetAllAnimation(MapAnimation);
 
 	Super::BeginPlay();
+
+	// PlayerData에서 공격력을 가져와 저장한다
+	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+	if (nullptr != Inst)
+	{
+		CurPlayerData = Inst->GetPlayerData(PlayerDataName);
+	}
+	PlayerAtt = CurPlayerData->ATT;
+
+	Damage(PlayerAtt);
 
 	GetGlobalAnimInstance()->OnMontageBlendingOut.AddDynamic(this, &APortfolio_Character::MontageEnd);
 	GetGlobalAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APortfolio_Character::AnimNotifyBegin);
@@ -197,6 +207,8 @@ void APortfolio_Character::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerRun"), EKeys::LeftShift));
 		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("PlayerCrouch"), EKeys::Q));
+		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("StatusWindow"), EKeys::Zero));
+		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(TEXT("InventoryWindow"), EKeys::Nine));
 	}
 
 	// 키와 함수를 연결한다

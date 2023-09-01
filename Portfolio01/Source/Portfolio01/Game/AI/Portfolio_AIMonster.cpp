@@ -4,8 +4,15 @@
 #include "Portfolio_AIMonster.h"
 #include <Global/Portfolio_GameInstance.h>
 #include <Global/Data/MonsterData.h>
-
+#include <UI/Portfolio_MiniMap_Component.h>
 #include "BehaviorTree/BlackboardComponent.h"
+
+APortfolio_AIMonster::APortfolio_AIMonster()
+{
+	MiniMap = CreateDefaultSubobject<UPortfolio_MiniMap_Component>(TEXT("MiniMapComponent"));
+	MiniMap->SetupAttachment(RootComponent);
+	MiniMap->MiniMapInit(this);
+}
 
 void APortfolio_AIMonster::BeginPlay()
 {
@@ -22,6 +29,11 @@ void APortfolio_AIMonster::BeginPlay()
 	}
 
 	Super::BeginPlay();
+
+	if (nullptr == GetBlackboardComponent())
+	{
+		return;
+	}
 
 	GetBlackboardComponent()->SetValueAsEnum(TEXT("AIState"), static_cast<uint8>(AIState::IDLE));
 	GetBlackboardComponent()->SetValueAsString(TEXT("TargetTag"), TEXT("Player"));

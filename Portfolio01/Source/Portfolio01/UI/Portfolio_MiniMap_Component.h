@@ -16,13 +16,20 @@ public:
 	// Sets default values for this component's properties
 	UPortfolio_MiniMap_Component();
 
+	// 생성자에서만 호출하시오 
+	void MiniMapInit(class APortfolio_GlobalCharacter* _Owner);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+private:
+	UPROPERTY(Category = "Components", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(Category = "Components", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* StaticMeshComponent;
 		
 };

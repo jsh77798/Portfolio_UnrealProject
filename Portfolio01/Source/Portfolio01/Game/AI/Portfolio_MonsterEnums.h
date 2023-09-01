@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 
+// ENUM정보-> Monster행동(애니메이션)
 UENUM(BlueprintType)
 enum class AIState : uint8
 {

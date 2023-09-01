@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Global/Portfolio_GlobalCharacter.h"
 #include <Global/Portfolio_GameInstance.h>
+#include <Global/Data/PlayerData.h>
 #include <Global/Portfolio_Tile.h>
 #include "Portfolio_Enums.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -19,6 +20,12 @@ public:
 	// Sets default values for this character's properties
 	APortfolio_Character();
 
+	// PlayerData에서 데미지 값 가져오기
+	UPROPERTY(Category = "ATT", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FName PlayerDataName = "NONE";
+
+	struct FPlayerData* CurPlayerData;
+	int PlayerAtt = 0;
 
 	// 블루프린트에서 호출하게 하려면 기본적으로 public이어야 합니다.
 	UFUNCTION(BlueprintCallable)

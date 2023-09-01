@@ -17,10 +17,11 @@ class PORTFOLIO01_API UPortfolio_Global : public UBlueprintFunctionLibrary
 public:
 	static FRandomStream MainRandom;
 
+	// ARDebugTextInit함수-> 
 	UFUNCTION(BlueprintCallable, Category = "Portfolio_Global")
 		static void ARDebugTextInit();
 
-	//디버그 텍스트를 위젯을 통해서 화면에 뿌려주는 함수.
+	// ARDebugTextPrint함수-> 디버그 텍스트를 위젯을 통해 표시한다
 	UFUNCTION(BlueprintCallable, Category = "Portfolio_Global", meta = (DefaultToSelf = "_Object"))
 		static void ARDebugTextPrint(class AActor* _Object, const FString& _Text);
 

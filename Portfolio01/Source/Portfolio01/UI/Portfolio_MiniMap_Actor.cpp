@@ -23,5 +23,11 @@ void APortfolio_MiniMap_Actor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (nullptr == TraceActor)
+	{
+		return;
+	}
+
+	SetActorLocation(TraceActor->GetActorLocation());
 }
 

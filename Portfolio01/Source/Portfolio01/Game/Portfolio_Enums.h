@@ -2,11 +2,7 @@
 
 #include "CoreMinimal.h"
 
-// 애니메이션에 집중할거냐
-// 캐릭터에 집중할 거냐?
-
-// UMETA는 각 옵션마다 설정을 다르게 해줄수 있습니다.
-
+// ENUM정보-> Player행동(애니메이션)
 UENUM(BlueprintType)
 enum class EAniState : uint8
 {
@@ -35,19 +31,19 @@ enum class EAniState : uint8
 	Crouch_BackwardMove UMETA(DisplayName = "Crouch_BackwardMove"),
 };
 
-	/*
-	Run UMETA(DisplayName = "Run"),
+/*
+Run UMETA(DisplayName = "Run"),
 
 
-	W_Idle UMETA(DisplayName = "W_Idle"),
-	W_LeftMove UMETA(DisplayName = "W_LeftMove"),
-	W_RightMove UMETA(DisplayName = "W_RightMove"),
-	W_ForwardMove UMETA(DisplayName = "W_ForwardMove"),
-	W_BackwardMove UMETA(DisplayName = "W_BackwardMove"),
-	W_Run UMETA(DisplayName = "W_Run"),
-	W_Crouch UMETA(DisplayName = "W_Crouch"),
-	W_CrouchUP UMETA(DisplayName = "W_CrouchUP"),
-	*/
+W_Idle UMETA(DisplayName = "W_Idle"),
+W_LeftMove UMETA(DisplayName = "W_LeftMove"),
+W_RightMove UMETA(DisplayName = "W_RightMove"),
+W_ForwardMove UMETA(DisplayName = "W_ForwardMove"),
+W_BackwardMove UMETA(DisplayName = "W_BackwardMove"),
+W_Run UMETA(DisplayName = "W_Run"),
+W_Crouch UMETA(DisplayName = "W_Crouch"),
+W_CrouchUP UMETA(DisplayName = "W_CrouchUP"),
+*/
 
 /*
 UENUM(BlueprintType)

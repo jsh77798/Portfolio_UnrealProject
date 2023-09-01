@@ -12,16 +12,11 @@ FRandomStream UPortfolio_Global::MainRandom;
 
 void UPortfolio_Global::ARDebugTextInit()
 {
-	// 끝날을때 자동으로 지워지지만
-	// delete를 한다고 
 	DebugWidget = nullptr;
 }
 
 void UPortfolio_Global::ARDebugTextPrint(class AActor* _AActor, const FString& _Text)
 {
-	// 여기서 만약 위젯이 없다면
-	// 만들어 내야 한다.
-	// 위젯이 없어.
 	if (nullptr == DebugWidget)
 	{
 		UWorld* World = _AActor->GetWorld();
@@ -30,10 +25,6 @@ void UPortfolio_Global::ARDebugTextPrint(class AActor* _AActor, const FString& _
 		{
 			return;
 		}
-
-		// 
-
-		// 이걸 런타임 중간에 알아내는 방법은
 
 		FSoftClassPath ObjectClass("/Script/UMGEditor.WidgetBlueprint'/Game/BluePrint/Global/WBP_GlobalDebug.WBP_GlobalDebug'");
 		TSubclassOf<UUserWidget> SubClassValue = ObjectClass.TryLoadClass<UUserWidget>();
@@ -47,7 +38,6 @@ void UPortfolio_Global::ARDebugTextPrint(class AActor* _AActor, const FString& _
 
 		if (nullptr == NewWidGet)
 		{
-			// 생성에 실패할때까 있을수 있으므로 이것도 처리해준다.
 			return;
 		}
 

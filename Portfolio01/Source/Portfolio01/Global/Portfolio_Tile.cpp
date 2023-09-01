@@ -4,6 +4,7 @@
 #include "Global/Portfolio_Tile.h"
 #include <Global/Portfolio_GameInstance.h>
 #include <Global/Data/PlayerData.h>
+#include <Global/Data/TileData.h>
 #include <Global/Portfolio_GlobalCharacter.h>
 
 // Sets default values
@@ -22,16 +23,9 @@ APortfolio_Tile::APortfolio_Tile()
 // Called when the game starts or when spawned
 void APortfolio_Tile::BeginPlay()
 {
-	//PlayerData에 Att값을 가져와 사용한다
-	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
-	if (nullptr != Inst)
-	{
-		CurPlayerData = Inst->GetPlayerData(AttDataName);
-	}
-	PlayerAtt = CurPlayerData->ATT;
-
-
 	Super::BeginPlay();
+
+	//PlayerAtt = CurPlayerData->ATT;
 
 	OnDestroyed.AddDynamic(this, &APortfolio_Tile::DestroyProjectile);
 	// SphereComponent->SetCollisionProfileName(TEXT("MonsterAttack"), true);
@@ -63,33 +57,47 @@ void APortfolio_Tile::Tick(float DeltaTime)
 			return;
 		}
 
+     	RangeAtt += 100 * DeltaTime;
+
+	    AddActorWorldOffset(GetActorForwardVector() * DeltaTime * Speed);
+
+		
 
 		//if (DeltaTime >= 0.01f)
 		//{
 
-     	PlayerAtt -= RangeAtt * DeltaTime * 0.1;
 		//PlayerAtt에 값을 저장하여, 적중시 HP계산할때 사용한다
 
-		GetData(PlayerAtt);
+		//GetData(PlayerAtt);
 
 		    //UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
-			//Inst->GetGameData(PlayerAtt);
+			//Inst->GetGameData();
 		//}
 	
-
-	AddActorWorldOffset(GetActorForwardVector() * DeltaTime * Speed);
 }
 
-void APortfolio_Tile::GetData(int _Data) 
-{
-	Data = _Data;
 
-	UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
-	Inst->GetGameData(Data, this);
-	
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 int APortfolio_Tile::SetData() 
 {
 	return Data;
 }
+*/
+
+

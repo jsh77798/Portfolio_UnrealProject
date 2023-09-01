@@ -20,31 +20,52 @@ public:
 	UPortfolio_GameInstance();
 	~UPortfolio_GameInstance();
 
-	TSubclassOf<UObject> GetSubClass(FName _Name);
-
+	// Get...함수-> 해당 데이터 가져오기
 	UStaticMesh* GetMesh(FName _Name);
+
+	const struct FItemData* GetRandomItemData();
+
+	TSubclassOf<UObject> GetSubClass(FName _Name);
 
 	struct FMonsterData* GetMonsterData(FName _Name);
 
 	struct FPlayerData* GetPlayerData(FName _Name);
 
+	struct FTileData* GetTileData(FName _Name);
+
+	// GetGameData함수-> 무기 공격력 가져오기, SetGameData함수-> 무기 공격력 설정
 	void GetGameData(int _Data, AActor* Owner);
 	int SetGameData();
 	int GameAtt = 0;
 	AActor* _Owner = nullptr;
 
 private:
+	// SubClassData 테이블
 	UPROPERTY()
 	UDataTable* SubClassData;
 
+	// MeshData 테이블
 	UPROPERTY()
 	UDataTable* MeshDatas;
 
+	// ItemData 테이블
+	UPROPERTY()
+	UDataTable* ItemDatas;
+
+	TArray<const struct FItemData*> ItemDataRandoms;
+
+	// MonsterData 테이블
 	UPROPERTY()
 	UDataTable* MonsterDatas;
 
+	// PlayerData 테이블
 	UPROPERTY()
 	UDataTable* PlayerDatas;
 
+	// TileData 테이블
+	UPROPERTY()
+	UDataTable* TileDatas;
+
 	TArray<UStaticMesh*> Arrmesh;
+
 };

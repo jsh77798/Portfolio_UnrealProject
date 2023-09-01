@@ -11,22 +11,17 @@ UCLASS()
 class PORTFOLIO01_API APortfolio_Tile : public AActor
 {
 	GENERATED_BODY()
-
-	struct FPlayerData* CurPlayerData;
-
-	UPROPERTY(Category = "ATT", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    FName AttDataName = "NONE";
-
-	int PlayerAtt = 0;
-	int RangeAtt = 100;
-
-	int Data = 0;
-	
-
+		
 public:	
 	// Sets default values for this actor's properties
 	
 	APortfolio_Tile();
+
+
+	UPROPERTY(Category = "Effect", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	    int RangeAtt = 0;
+
+	int Data = 0;
 
 	UPROPERTY(Category = "Effect", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float Speed = 3000.0f;
@@ -43,24 +38,14 @@ public:
 		return SphereComponent;
 	}
 
-	UFUNCTION()
-	void GetData(int _Data);
-
-	UFUNCTION()
-	int SetData();
-
-	//class APortfolio_GlobalCharacter* ATT = nullptr;
-	//int ShutGunAtt = 1000;
-
-
 protected:
 	// Called when the game starts or when spawned
 	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-
 private:
+
 	//Called every frame
 	UFUNCTION()
 		void DestroyProjectile(AActor* _Destroy);

@@ -4,6 +4,7 @@
 #include "Global/Portfolio_GlobalCharacter.h"
 #include <Global/Portfolio_GameInstance.h>
 #include <Global/Data/PlayerData.h>
+#include <Global/Data/TileData.h>
 #include <Global/Portfolio_Tile.h>
 #include "Components/CapsuleComponent.h"
 
@@ -19,6 +20,7 @@ APortfolio_GlobalCharacter::APortfolio_GlobalCharacter()
 void APortfolio_GlobalCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 
 	Portfolio_GlobalAnimInstance = Cast<UPortfolio_GlobalAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -45,26 +47,32 @@ void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponen
 	int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
-	// 만약 HP를 깎는일이 있다면.
-	// 여기서 깍고 
-	// 지금 당장은 무조건 Hp가 깍이라고 할수 있지만
-	// 아이템일까?
-	// 총알일까?
-	// Tag
-	
+
+	//Damage Tag에 접촉시 사용
 	if (true == OtherComp->ComponentHasTag(TEXT("Damage")))
 	{
-		// 상대가 대미지를 가졌다면 어떻게 알아올것이냐?
 		int ATT = 0;
-		UPortfolio_GameInstance* Inst = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
-		//APortfolio_Tile* Tile = NewObject<APortfolio_Tile>();
+		int RANGEATT = 0;
 
-		ATT = Inst->SetGameData();
+		// -추가작업-
+		// 아래 코드를 Portfolio_Tile로 이동
+		// 
+		//APortfolio_Tile* Tile = NewObject<APortfolio_Tile>();
+		UPortfolio_GameInstance* Tile = GetWorld()->GetGameInstance<UPortfolio_GameInstance>();
+		if (nullptr != Tile)
+		{
+			//CurData = Cast<APortfolio_Tile>(Tile->GetTileData(RangeAttDataName));
+			CurData = Tile->GetTileData(RangeAttDataName);
+		}
+		RANGEATT = CurData->RANGE_ATT;
+
+		ATT = Att; // PlayerAtt은 GlobalCharacter.h에 함수를 통해 Character에서 플레이어의 데미지 값을 가져온다
+		ATT -= RANGEATT;
+
 		if (100 >= ATT)
 		{
 			ATT = 100;
 		}
 		HP -= ATT;
-		//Damage(OtherActor);
 	}
 }
