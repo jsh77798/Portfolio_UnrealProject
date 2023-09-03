@@ -8,7 +8,7 @@ void UPortfolio_Widget_Main::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	// Inven = Cast<UInventoryUserWidget>(GetWidgetFromName(TEXT("WBP_Inventory")));
+	// Inven = Cast<UInventoryUserWidget>(GetWidgetFromName(TEXT("WBP_UI_Inventory")));
 	// Inven = Cast<UInventoryUserWidget>(GetWidgetFromName(TEXT("WBP_Status")));
 
 

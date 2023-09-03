@@ -24,7 +24,7 @@ void APortfolio_HUD::BeginPlay()
 	
 	UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), MainWidgetClass);
 	MainWidget = Cast<UPortfolio_Widget_Main>(Widget);
-	//MainWidget->AddToViewport();
+	MainWidget->AddToViewport();
 
 	/*
 	{
