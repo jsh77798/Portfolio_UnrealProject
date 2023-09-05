@@ -39,6 +39,11 @@ public:
 		InventoryOnOff = BackGroundOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	}
 
+	void SetBButtonOnOffSwitch()
+	{
+		ButtonOnOff = ButtonOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+	}
+
 protected:
 	void NativeConstruct() override;
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
@@ -56,6 +61,9 @@ private:
 
 	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		ESlateVisibility BackGroundOnOff = ESlateVisibility::Hidden;
+
+	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		ESlateVisibility ButtonOnOff = ESlateVisibility::Hidden;
 
 	class UInventoryUserWidget* Inven;
 
