@@ -13,7 +13,9 @@ void UPortfolio_Widget_Main::NativeConstruct()
 
 
 	AllWidGet.Add(Cast<UUserWidget>(GetWidgetFromName(TEXT("WBP_UI_Inventory"))));
-	//AllWidGet.Add(Cast<UUserWidget>(GetWidgetFromName(TEXT("WBP_Status"))));
+	AllWidGet.Add(Cast<UUserWidget>(GetWidgetFromName(TEXT("WBP_UI_MiniMap"))));
+	AllWidGet.Add(Cast<UUserWidget>(GetWidgetFromName(TEXT("WBP_UI_Option"))));
+	AllWidGet.Add(Cast<UUserWidget>(GetWidgetFromName(TEXT("WBP_UI_BackGround"))));
 }
 
 void UPortfolio_Widget_Main::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

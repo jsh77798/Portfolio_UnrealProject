@@ -24,9 +24,9 @@ public:
 		OptionOnOff = OptionOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	}
 
-	void SetStatusWindowOnOffSwitch()
+	void SetMapWindowOnOffSwitch()
 	{
-		StatusWindowOnOff = StatusWindowOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+		MapWindowOnOff = MapWindowOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	}
 
 	void SetInventoryOnOffSwitch()
@@ -34,7 +34,10 @@ public:
 		InventoryOnOff = InventoryOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	}
 
-
+	void SetBackGroundOnOffSwitch()
+	{
+		InventoryOnOff = BackGroundOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+	}
 
 protected:
 	void NativeConstruct() override;
@@ -46,10 +49,13 @@ private:
 		ESlateVisibility InventoryOnOff = ESlateVisibility::Hidden;
 
 	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		ESlateVisibility StatusWindowOnOff = ESlateVisibility::Hidden;
+		ESlateVisibility MapWindowOnOff = ESlateVisibility::Hidden;
 
 	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		ESlateVisibility OptionOnOff = ESlateVisibility::Hidden;
+
+	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		ESlateVisibility BackGroundOnOff = ESlateVisibility::Hidden;
 
 	class UInventoryUserWidget* Inven;
 
