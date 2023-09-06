@@ -394,6 +394,8 @@ void APortfolio_Character::IN_AimingAction()
 {
 	SetAniState(EAniState::W_Aiming);
 
+	SetAimingCheck(true);
+
 	float a = 80.0f; //Å¸°Ù¾Ï ±æÀÌ
 	float b = 80.0f; //Å¸°Ù¾Ï YÃà
 	float c = 70.0f; //Å¸°Ù¾Ï ZÃà
@@ -421,6 +423,7 @@ void APortfolio_Character::OUT_AimingAction()
 		AimingActionCheck = 0;
 	}
 
+	SetAimingCheck(false);
 	bZoomingIn = false;
 }
 

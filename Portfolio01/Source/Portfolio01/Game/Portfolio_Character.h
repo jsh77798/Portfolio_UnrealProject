@@ -7,6 +7,7 @@
 #include <Global/Portfolio_GameInstance.h>
 #include <Global/Data/PlayerData.h>
 #include <Global/Portfolio_Tile.h>
+#include <UI/Portfolio_Widget_Main.h>
 #include "Portfolio_Enums.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Portfolio_Character.generated.h"
@@ -41,6 +42,15 @@ protected:
 
 	
 public:	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	bool AimingCheck;
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void SetAimingCheck(const bool& Check)
+	{
+		AimingCheck = Check;
+	}
 
 	void MoveRight(float Val);
 	void MoveForward(float Val);

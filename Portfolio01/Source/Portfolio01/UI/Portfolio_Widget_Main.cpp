@@ -3,6 +3,10 @@
 
 #include "UI/Portfolio_Widget_Main.h"
 #include "UI/Portfolio_Widget_Inventory.h"
+#include "Game/Portfolio_Character.h"
+#include "Global/Portfolio_GlobalCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Game/Portfolio_Enums.h"
 
 void UPortfolio_Widget_Main::NativeConstruct()
 {
@@ -21,7 +25,7 @@ void UPortfolio_Widget_Main::NativeConstruct()
 void UPortfolio_Widget_Main::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-
+	
 	// 기본적인 이동이나 이런 시스템자체가 다르다는것을 기억해야 한다.
 	// Inven->SetPositionInViewport({100, 100});
 	// Inven->SetAnchorsInViewport();
@@ -49,4 +53,13 @@ bool UPortfolio_Widget_Main::CheckAllWidGetHidden()
 	}
 
 	return false;
+}
+
+bool UPortfolio_Widget_Main::CheckAiming()
+{
+	// Portfolio_Character에서 Aiming상태를 체크하고 값을 가져온다
+    APortfolio_Character* MyCharacter = Cast<APortfolio_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));  //UGameplayStatics => #include "Kismet/GameplayStatics.h"헤더 필요
+	bool AimingCheck = MyCharacter->AimingCheck;
+
+	return AimingCheck;
 }

@@ -19,6 +19,10 @@ public:
 		bool CheckAllWidGetHidden();
 
 	UFUNCTION(BlueprintCallable)
+		bool CheckAiming();
+		
+
+	UFUNCTION(BlueprintCallable)
 		void SetOptionOnOffSwitch()
 	{
 		OptionOnOff = OptionOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
@@ -44,6 +48,11 @@ public:
 		ButtonOnOff = ButtonOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	}
 
+	void SetAimingOnOffSwitch()
+	{
+		AimingOnOff = AimingOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+	}
+
 protected:
 	void NativeConstruct() override;
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
@@ -64,6 +73,9 @@ private:
 
 	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		ESlateVisibility ButtonOnOff = ESlateVisibility::Hidden;
+
+	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		ESlateVisibility AimingOnOff = ESlateVisibility::Hidden;
 
 	class UInventoryUserWidget* Inven;
 
