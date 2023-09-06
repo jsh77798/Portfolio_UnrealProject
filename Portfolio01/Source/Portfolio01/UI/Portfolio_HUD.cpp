@@ -28,11 +28,11 @@ void APortfolio_HUD::BeginPlay()
 
 	
 	{
-		UUserWidget* Window = Cast<UUserWidget>(MainWidget->GetWidgetFromName(TEXT("TalkTextWindow")));
+		UUserWidget* Window = Cast<UUserWidget>(MainWidget->GetWidgetFromName(TEXT("MapWindow")));
 	}
 
 	{
-		UUserWidget* Window = Cast<UUserWidget>(MainWidget->GetWidgetFromName(TEXT("StatusWindow")));
+		UUserWidget* Window = Cast<UUserWidget>(MainWidget->GetWidgetFromName(TEXT("OptionWindow")));
 	}
 	
 }

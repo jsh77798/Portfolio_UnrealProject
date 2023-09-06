@@ -34,9 +34,9 @@ public:
 		InventoryOnOff = InventoryOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	}
 
-	void SetBackGroundOnOffSwitch()
+	void SetW_BackGroundOnOffSwitch()
 	{
-		InventoryOnOff = BackGroundOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+		W_BackGroundOnOff = W_BackGroundOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	}
 
 	void SetBButtonOnOffSwitch()
@@ -60,7 +60,7 @@ private:
 		ESlateVisibility OptionOnOff = ESlateVisibility::Hidden;
 
 	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		ESlateVisibility BackGroundOnOff = ESlateVisibility::Hidden;
+		ESlateVisibility W_BackGroundOnOff = ESlateVisibility::Hidden;
 
 	UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		ESlateVisibility ButtonOnOff = ESlateVisibility::Hidden;
