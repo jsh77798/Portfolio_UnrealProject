@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Engine/DataTable.h"
+#include "Portfolio_Global.h"
 #include "Portfolio_GlobalObject.h"
 #include "Portfolio_GameInstance.generated.h"
 

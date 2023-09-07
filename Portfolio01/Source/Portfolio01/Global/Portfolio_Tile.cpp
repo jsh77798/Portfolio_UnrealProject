@@ -59,6 +59,8 @@ void APortfolio_Tile::Tick(float DeltaTime)
 
      	RangeAtt += 100 * DeltaTime;
 
+		SetAttRange(RangeAtt);
+
 	    AddActorWorldOffset(GetActorForwardVector() * DeltaTime * Speed);
 
 		

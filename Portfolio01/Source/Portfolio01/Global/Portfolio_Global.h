@@ -17,6 +17,12 @@ class PORTFOLIO01_API UPortfolio_Global : public UBlueprintFunctionLibrary
 public:
 	static FRandomStream MainRandom;
 
+	UFUNCTION(BlueprintCallable, Category = "ARGlobal")
+	    static void EditorTestFunction();
+
+	UFUNCTION(BlueprintCallable, Category = "ARGlobal")
+	    static UWorld* GetCurrentWorld();
+
 	// ARDebugTextInitÇÔ¼ö-> 
 	UFUNCTION(BlueprintCallable, Category = "Portfolio_Global")
 		static void ARDebugTextInit();
@@ -26,4 +32,5 @@ public:
 		static void ARDebugTextPrint(class AActor* _Object, const FString& _Text);
 
 	static class UPortfolio_GlobalUserWidget* DebugWidget;
+
 };

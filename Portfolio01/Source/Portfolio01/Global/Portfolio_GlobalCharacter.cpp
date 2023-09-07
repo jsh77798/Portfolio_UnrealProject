@@ -6,6 +6,7 @@
 #include <Global/Data/PlayerData.h>
 #include <Global/Data/TileData.h>
 #include <Global/Portfolio_Tile.h>
+#include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -51,6 +52,7 @@ void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponen
 	//Damage Tag에 접촉시 사용
 	if (true == OtherComp->ComponentHasTag(TEXT("Damage")))
 	{
+
 		int ATT = 0;
 		int RANGEATT = 0;
 

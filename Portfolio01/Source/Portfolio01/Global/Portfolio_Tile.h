@@ -17,6 +17,14 @@ public:
 	
 	APortfolio_Tile();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Actor")
+	int AttRange;
+
+	UFUNCTION(BlueprintCallable, Category = "Actor")
+	void SetAttRange(const int& _AttRange)
+	{
+		AttRange = _AttRange;
+	}
 
 	UPROPERTY(Category = "Effect", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	    int RangeAtt = 0;
