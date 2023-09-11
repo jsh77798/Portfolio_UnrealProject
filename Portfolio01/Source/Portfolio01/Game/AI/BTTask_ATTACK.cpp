@@ -31,6 +31,12 @@ void UBTTask_ATTACK::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 		return;
 	}
 
+	if (true == IsStunCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::STUN);
+		return;
+	}
+
 	UAnimMontage* Montage = GetGlobalCharacter(OwnerComp)->GetAnimMontage(UBTTask_AIBase::GetAiState(OwnerComp));
 	float Time = Montage->CalculateSequenceLength();
 

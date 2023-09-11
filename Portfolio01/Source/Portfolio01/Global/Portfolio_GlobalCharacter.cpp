@@ -28,6 +28,7 @@ void APortfolio_GlobalCharacter::BeginPlay()
 	Portfolio_GlobalAnimInstance->AllAnimations = AllAnimations;
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APortfolio_GlobalCharacter::OverLap);
+
 }
 
 // Called every frame
@@ -42,6 +43,7 @@ void APortfolio_GlobalCharacter::SetupPlayerInputComponent(UInputComponent* Play
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+
 void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor,
 	UPrimitiveComponent* OtherComp,
@@ -52,7 +54,8 @@ void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponen
 	//Damage Tag에 접촉시 사용
 	if (true == OtherComp->ComponentHasTag(TEXT("Damage")))
 	{
-
+		
+		/*
 		int ATT = 0;
 		int RANGEATT = 0;
 
@@ -76,5 +79,26 @@ void APortfolio_GlobalCharacter::OverLap(UPrimitiveComponent* OverlappedComponen
 			ATT = 100;
 		}
 		HP -= ATT;
+		*/
 	}
 }
+
+
+float APortfolio_GlobalCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	// Call the parent class's TakeDamage function to handle damage effects (e.g., reducing health).
+	//const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	
+	HP -= DamageAmount;
+	// Implement your damage handling logic here.
+	// For example, you can reduce the character's health based on ActualDamage.
+	// You can also check if the character's health is less than or equal to 0 and handle death.
+
+	// Return the actual damage taken, which may be modified by your damage handling logic.
+	return DamageAmount;
+}
+
+
+
+
+

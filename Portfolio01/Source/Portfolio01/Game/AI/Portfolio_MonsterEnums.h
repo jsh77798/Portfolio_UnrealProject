@@ -13,4 +13,5 @@ enum class AIState : uint8
 	PATROL UMETA(DisplayName = "PATROL"),
 	ATTACK UMETA(DisplayName = "ATTACK"),
 	DEATH UMETA(DisplayName = "DEATH"),
+	STUN UMETA(DisplayName = "STUN")
 };

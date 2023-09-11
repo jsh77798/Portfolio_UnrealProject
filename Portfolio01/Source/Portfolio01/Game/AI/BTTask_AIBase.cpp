@@ -194,7 +194,18 @@ bool UBTTask_AIBase::IsAttackCheck(UBehaviorTreeComponent& OwnerComp)
 {
 	if (1000 > GetGlobalCharacter(OwnerComp)->GetHP())
 	{
-		SetStateChange(OwnerComp, AIState::DEATH);
+		SetStateChange(OwnerComp, AIState::MOVE);
+		return true;
+	}
+
+	return false;
+}
+
+bool UBTTask_AIBase::IsStunCheck(UBehaviorTreeComponent& OwnerComp)
+{
+	if (300 <= GetGlobalCharacter(OwnerComp)->GetATT())
+	{
+		SetStateChange(OwnerComp, AIState::STUN);
 		return true;
 	}
 

@@ -46,6 +46,26 @@ public:
 		return SphereComponent;
 	}
 
+
+
+
+
+
+
+		UPROPERTY(EditAnywhere, Category = "Bullet")
+		float MaxDamageDistance = 5.0f;
+
+		UPROPERTY(EditAnywhere, Category = "Bullet")
+		float DamagePerUnit = 500.0f; 
+
+		UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+		FVector GetLocation;
+
+
+
+
 protected:
 	// Called when the game starts or when spawned
 	

@@ -1,25 +1,33 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Game/AI/BTTask_IDLE.h"
+#include "Game/AI/BTTask_STUN.h"
 #include <Global/Portfolio_GlobalCharacter.h>
 #include <Game/AI/Portfolio_AIController.h>
 #include <Game/AI/Portfolio_MonsterEnums.h>
 #include <BehaviorTree/BlackboardComponent.h>
 #include "Kismet/GameplayStatics.h"
 #include "Math/NumericLimits.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
-EBTNodeResult::Type UBTTask_IDLE::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+
+UBTTask_STUN::UBTTask_STUN()
+{
+	bNotifyTick = true;
+	bNotifyTaskFinished = true;
+}
+
+EBTNodeResult::Type UBTTask_STUN::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
-	GetGlobalCharacter(OwnerComp)->SetAniState(AIState::IDLE);
+	GetGlobalCharacter(OwnerComp)->SetAniState(AIState::STUN); // 리소스를 구한후 STUN 애니메이션으로 변경
 
 	ThisPos = GetGlobalCharacter(OwnerComp)->GetActorLocation();
 
 	return EBTNodeResult::Type::InProgress;
 }
 
-void UBTTask_IDLE::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DelataSeconds)
+void UBTTask_STUN::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DelataSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DelataSeconds);
 
@@ -29,13 +37,7 @@ void UBTTask_IDLE::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		return;
 	}
 
-	if (true == IsStunCheck(OwnerComp))
-	{
-		SetStateChange(OwnerComp, AIState::STUN);
-		return;
-	}
-
-	if (2.0f <= GetStateTime(OwnerComp))
+	if (0.5f <= GetStateTime(OwnerComp))
 	{
 		// 지역변수로 랜덤을 이용하는것.
 		FRandomStream Stream;
@@ -50,7 +52,7 @@ void UBTTask_IDLE::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 
 		//if (Value == 0)
 		//{
-		SetStateChange(OwnerComp, AIState::PATROL);
+		SetStateChange(OwnerComp, AIState::MOVE);
 		return;
 		//}
 

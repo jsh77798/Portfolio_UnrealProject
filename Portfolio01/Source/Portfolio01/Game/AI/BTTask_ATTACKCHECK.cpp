@@ -1,29 +1,24 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Game/AI/BTTask_MOVE.h"
+#include "Game/AI/BTTask_ATTACKCHECK.h"
 #include <Global/Portfolio_GlobalCharacter.h>
 #include <Game/AI/Portfolio_AIController.h>
 #include <Game/AI/Portfolio_MonsterEnums.h>
 #include <BehaviorTree/BlackboardComponent.h>
 #include "GameFramework/CharacterMovementComponent.h"
 
-// 일단 써치 범위 바깥으로 이동하면
-// Return 상태로 전환하는 것은 2가지 상황이 존재한다.
-// 1. 그냥 플레이어가 너무 멀어져서 나는 돌아간다.
-// 2. 내 원래자리(만들어진 순간에 자신의 위치.)에서 너무 멀리 떨어졌다.
 
-
-UBTTask_MOVE::UBTTask_MOVE()
+UBTTask_ATTACKCHECK::UBTTask_ATTACKCHECK()
 {
 	bNotifyTick = true;
 	bNotifyTaskFinished = true;
 }
 
-EBTNodeResult::Type UBTTask_MOVE::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_ATTACKCHECK::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 
-	GetGlobalCharacter(OwnerComp)->SetAniState(AIState::MOVE);
+	GetGlobalCharacter(OwnerComp)->SetAniState(AIState::IDLE);
 
 	UCharacterMovementComponent* MoveCom = Cast<UCharacterMovementComponent>(GetGlobalCharacter(OwnerComp)->GetMovementComponent());
 
@@ -35,7 +30,7 @@ EBTNodeResult::Type UBTTask_MOVE::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	return EBTNodeResult::Type::InProgress;
 }
 
-void UBTTask_MOVE::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DelataSeconds)
+void UBTTask_ATTACKCHECK::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DelataSeconds)
 {
 	UObject* TargetObject = GetBlackboardComponent(OwnerComp)->GetValueAsObject(TEXT("TargetActor"));
 	AActor* TargetActor = Cast<AActor>(TargetObject);

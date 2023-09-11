@@ -16,6 +16,10 @@ public:
 	// Sets default values for this character's properties
 	APortfolio_GlobalCharacter();
 
+
+	//virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	UPROPERTY(Category = "RangeATT", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		FName RangeAttDataName = "NONE";
 
@@ -35,6 +39,11 @@ public:
 	int GetHP()
 	{
 		return HP;
+	}
+
+	int GetATT()
+	{
+		return Att;
 	}
 
 	int GetAniState()
@@ -125,7 +134,7 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
+    
 	UFUNCTION()
 		void OverLap(class UPrimitiveComponent* OverlappedComponent,
 			class AActor* OtherActor,
@@ -133,6 +142,7 @@ protected:
 			int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
     
+
 	virtual void Damage(int _Att)
 	{
 		Att = _Att;

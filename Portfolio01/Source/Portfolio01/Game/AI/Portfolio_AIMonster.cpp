@@ -4,6 +4,7 @@
 #include "Portfolio_AIMonster.h"
 #include <Global/Portfolio_GameInstance.h>
 #include <Global/Data/MonsterData.h>
+#include <Global/Portfolio_Tile.h>
 #include <UI/Portfolio_MiniMap_Component.h>
 #include "BehaviorTree/BlackboardComponent.h"
 

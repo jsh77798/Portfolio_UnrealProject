@@ -69,6 +69,12 @@ void UBTTask_PATROL::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 		return;
 	}
 
+	if (true == IsStunCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::STUN);
+		return;
+	}
+
 	UObject* PPObject = GetBlackboardComponent(OwnerComp)->GetValueAsObject(TEXT("PatrolPositions"));
 
 	if (nullptr == PPObject)

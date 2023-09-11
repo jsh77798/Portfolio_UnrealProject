@@ -51,6 +51,8 @@ public:
 
 	bool IsAttackCheck(UBehaviorTreeComponent& OwnerComp);
 
+	bool IsStunCheck(UBehaviorTreeComponent& OwnerComp);
+
 	//void SetPos(FVector& _Pos, UBehaviorTreeComponent& OwnerComp, int Count);
 	//FVector GetPos();
 

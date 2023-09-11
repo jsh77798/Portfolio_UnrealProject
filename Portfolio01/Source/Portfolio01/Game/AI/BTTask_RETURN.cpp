@@ -41,6 +41,18 @@ void UBTTask_RETURN::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 		return;
 	}
 
+	if (true == IsStunCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::STUN);
+		return;
+	}
+
+	if (true == IsAttackCheck(OwnerComp))
+	{
+		SetStateChange(OwnerComp, AIState::MOVE);
+		return;
+	}
+
 	PrePos = GetBlackboardComponent(OwnerComp)->GetValueAsVector(TEXT("PrePos"));
 	PrePos.Z = 0.0f;
 
