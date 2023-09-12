@@ -63,3 +63,9 @@ bool UPortfolio_Widget_Main::CheckAiming()
 
 	return AimingCheck;
 }
+
+bool UPortfolio_Widget_Main::CheckRangeItem()
+{
+	
+	return true;
+}

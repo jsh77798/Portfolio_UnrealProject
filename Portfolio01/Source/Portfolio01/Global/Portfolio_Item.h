@@ -19,6 +19,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Take(AActor* _Actor);
 
+	//UFUNCTION(BlueprintCallable)
+	//void SetItemCheckOnOffSwitch()
+	//{
+	//  ItemCheckOnOff = ItemCheckOnOff == ESlateVisibility::Hidden ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+	//}
+
+	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,4 +35,7 @@ protected:
 
 private:	
 	const struct FItemData* Data = nullptr;
+
+	//UPROPERTY(Category = "UIOnOff", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	//ESlateVisibility ItemCheckOnOff = ESlateVisibility::Hidden;
 };

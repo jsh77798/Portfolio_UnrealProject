@@ -21,6 +21,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool CheckAiming();
 		
+	UFUNCTION(BlueprintCallable)
+		bool CheckRangeItem();
 
 	UFUNCTION(BlueprintCallable)
 		void SetOptionOnOffSwitch()
