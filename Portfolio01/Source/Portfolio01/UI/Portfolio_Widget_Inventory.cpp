@@ -24,7 +24,7 @@ void UPortfolio_Widget_Inventory::NativeConstruct()
 
 	// 여기에다가 뭘 넣어줘야 하는지가 내일 배워야할 내용.
 
-	for (size_t i = 0; i < 20; i++)
+	for (size_t i = 0; i < 4; i++)
 	{
 		UInventoryItemData* ItemObject = NewObject<UInventoryItemData>();
 		ItemObject->Data = nullptr;

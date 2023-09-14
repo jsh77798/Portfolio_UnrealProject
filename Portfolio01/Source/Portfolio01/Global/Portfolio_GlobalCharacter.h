@@ -105,6 +105,7 @@ public:
 		MgrComponent.Add(_Component);
 	}
 
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = "true"))
 		float BaseTurnRate;

@@ -76,12 +76,11 @@ void APortfolio_Tile::Tick(float DeltaTime)
 			return;
 		}
 
-     	RangeAtt += 100 * DeltaTime;
-
-		SetAttRange(RangeAtt);
-
-	    AddActorWorldOffset(GetActorForwardVector() * DeltaTime * Speed);
-
+		//AddActorLocalOffset(GetActorForwardVector() * DeltaTime * Speed);
+		//AddActorWorldOffset(GetActorRightVector() * DeltaTime * Speed);
+        AddActorWorldOffset(GetActorForwardVector()  * DeltaTime * Speed);
+		//AddActorWorldOffset(GetActorUpVector() * DeltaTime * Speed);
+		
 		//if (DeltaTime >= 0.01f)
 		//{
 
